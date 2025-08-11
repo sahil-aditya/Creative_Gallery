@@ -22,21 +22,24 @@
     position: relative;
     overflow: hidden;
     border-radius: 10px;
+    aspect-ratio: 16 / 9;
   }
-  .slider-img {
-    display: block;
+  .slider-img,
+  .overlay img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .overlay {
     position: absolute;
-    top: 0; left: 0;
+    top: 0;
+    left: 0;
     width: 50%;
     height: 100%;
     overflow: hidden;
-  }
-  .overlay img {
-    width: 100%;
-    display: block;
   }
   .handle {
     position: absolute;
@@ -47,6 +50,7 @@
     background: #fff;
     cursor: ew-resize;
     transform: translateX(-50%);
+    z-index: 10;
   }
 </style>
 </head>
@@ -57,7 +61,6 @@
 <div id="gallery"></div>
 
 <script>
-  // === Add your before/after image links here ===
   const imagePairs = [
     {
       before: "https://sahil-aditya.github.io/Creative_Gallery/images/before1.jpg",
@@ -67,12 +70,11 @@
       before: "https://via.placeholder.com/800x500/666/fff?text=Before+2",
       after: "https://via.placeholder.com/800x500/000/fff?text=After+2"
     }
-    // Add more here
   ];
 
   const gallery = document.getElementById("gallery");
 
-  imagePairs.forEach((pair, index) => {
+  imagePairs.forEach((pair) => {
     const container = document.createElement("div");
     container.classList.add("slider-container");
 
@@ -94,8 +96,7 @@
     const move = (x) => {
       const rect = container.getBoundingClientRect();
       let offsetX = x - rect.left;
-      if (offsetX < 0) offsetX = 0;
-      if (offsetX > rect.width) offsetX = rect.width;
+      offsetX = Math.max(0, Math.min(offsetX, rect.width));
       overlay.style.width = `${offsetX}px`;
       handle.style.left = `${offsetX}px`;
     };
