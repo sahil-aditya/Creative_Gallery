@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Before & After Gallery</title>
+<style>
+  body {
+    background-color: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .slider-container {
+    max-width: 800px;
+    margin: 40px auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  .slider-img {
+    display: block;
+    width: 100%;
+  }
+  .overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+  }
+  .overlay img {
+    width: 100%;
+    display: block;
+  }
+  .handle {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 4px;
+    height: 100%;
+    background: #fff;
+    cursor: ew-resize;
+    transform: translateX(-50%);
+  }
+</style>
+</head>
+<body>
+
+<h1>My Before & After Gallery</h1>
+
+<div id="gallery"></div>
+
+<script>
+  // === Add your before/after image links here ===
+  const imagePairs = [
+    {
+      before: "https://postimg.cc/cgMmPybQ",
+      after: "https://postimg.cc/vDYLDKKN"
+    },
+    {
+      before: "https://via.placeholder.com/800x500/666/fff?text=Before+2",
+      after: "https://via.placeholder.com/800x500/000/fff?text=After+2"
+    }
+    // Add more here
+  ];
+
+  const gallery = document.getElementById("gallery");
+
+  imagePairs.forEach((pair, index) => {
+    const container = document.createElement("div");
+    container.classList.add("slider-container");
+
+    container.innerHTML = `
+      <img src="${pair.after}" class="slider-img">
+      <div class="overlay">
+        <img src="${pair.before}">
+      </div>
+      <div class="handle"></div>
+    `;
+
+    gallery.appendChild(container);
+
+    const overlay = container.querySelector(".overlay");
+    const handle = container.querySelector(".handle");
+
+    let dragging = false;
+
+    const move = (x) => {
+      const rect = container.getBoundingClientRect();
+      let offsetX = x - rect.left;
+      if (offsetX < 0) offsetX = 0;
+      if (offsetX > rect.width) offsetX = rect.width;
+      overlay.style.width = `${offsetX}px`;
+      handle.style.left = `${offsetX}px`;
+    };
+
+    handle.addEventListener("mousedown", () => dragging = true);
+    window.addEventListener("mouseup", () => dragging = false);
+    window.addEventListener("mousemove", (e) => {
+      if (dragging) move(e.clientX);
+    });
+
+    handle.addEventListener("touchstart", () => dragging = true);
+    window.addEventListener("touchend", () => dragging = false);
+    window.addEventListener("touchmove", (e) => {
+      if (dragging) move(e.touches[0].clientX);
+    });
+  });
+</script>
+
+</body>
+</html>
