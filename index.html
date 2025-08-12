@@ -18,18 +18,19 @@
     text-align: center;
     margin-bottom: 5px;
     color: white;
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-size: clamp(1.5rem, 3vw, 2rem); /* Adjusted font-size */
     letter-spacing: 1px;
     opacity: 0;
     transform: translateY(10px);
     animation: fadeUp 1s ease forwards;
+    margin-top: 50px; /* Added margin to prevent overlap */
   }
   h3 {
     text-align: center;
     color: #c0abe1;
     font-weight: normal;
     margin-top: 0;
-    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-size: clamp(0.9rem, 2vw, 1.1rem); /* Adjusted font-size */
     opacity: 0;
     transform: translateY(10px);
     animation: fadeUp 1s ease forwards;
@@ -188,14 +189,12 @@
 </head>
 <body>
 
-<!-- Menu Button -->
 <button id="menu-btn">
   <div></div>
   <div></div>
   <div></div>
 </button>
 
-<!-- Contact Popup -->
 <div id="contact-popup">
   <h3>Get Your Photo Edited</h3>
   <p>Contact Us</p>
@@ -204,14 +203,11 @@
   <a id="phone-link" href="#" style="display:none;">📞 Call</a>
 </div>
 
-<!-- Info Icon -->
 <div class="info-icon" onclick="showDisclaimer()">ⓘ</div>
 
-<!-- Title -->
 <h1>Showcasing My Skills</h1>
 <h3>Colorist | sahil.aditya_</h3>
 
-<!-- Disclaimer popup -->
 <div id="disclaimer-popup" class="popup">
   <p>Disclaimer: Not every image here is clicked by me. Some are non-copyright images used only to demonstrate my color grading skills.</p>
   <button onclick="closeDisclaimer()">Close</button>
