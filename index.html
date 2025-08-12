@@ -108,9 +108,83 @@
     transform: translateX(-50%);
     z-index: 10;
   }
+
+  /* Contact Menu Button */
+  #menu-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: #222;
+    border: none;
+    padding: 10px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    z-index: 9999;
+  }
+  #menu-btn div {
+    width: 20px;
+    height: 2px;
+    background: white;
+    margin: 4px 0;
+  }
+
+  /* Contact Popup */
+  #contact-popup {
+    position: fixed;
+    top: 60px;
+    left: 20px;
+    background: #111;
+    color: white;
+    border-radius: 10px;
+    padding: 15px;
+    width: 220px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    display: none;
+    z-index: 10000;
+  }
+  #contact-popup h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  #contact-popup p {
+    margin: 4px 0 12px;
+    font-size: 13px;
+    color: #ccc;
+  }
+  #contact-popup a {
+    display: block;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    background: #222;
+    color: white;
+    transition: background 0.3s;
+  }
+  #contact-popup a:hover {
+    background: #333;
+  }
 </style>
 </head>
 <body>
+
+<!-- Menu Button -->
+<button id="menu-btn">
+  <div></div>
+  <div></div>
+  <div></div>
+</button>
+
+<!-- Contact Popup -->
+<div id="contact-popup">
+  <h3>Get Your Photo Edited</h3>
+  <p>Contact Us</p>
+  <a href="https://instagram.com/direct/t/sahil.aditya_" target="_blank">📩 DM on Instagram</a>
+  <a href="mailto:sahilmaurya321@outlook.in">✉️ Send Email</a>
+  <a id="phone-link" href="#" style="display:none;">📞 Call</a>
+</div>
 
 <!-- Info Icon -->
 <div class="info-icon" onclick="showDisclaimer()">ⓘ</div>
@@ -128,7 +202,28 @@
 <div id="gallery"></div>
 
 <script>
-  // Show/hide disclaimer
+  // Contact menu toggle
+  const menuBtn = document.getElementById('menu-btn');
+  const contactPopup = document.getElementById('contact-popup');
+  const phoneLink = document.getElementById('phone-link');
+
+  const phoneNumber = ""; // Add phone here if needed
+  if (phoneNumber) {
+    phoneLink.href = "tel:" + phoneNumber;
+    phoneLink.style.display = "block";
+  }
+
+  menuBtn.addEventListener('click', () => {
+    contactPopup.style.display = (contactPopup.style.display === "block") ? "none" : "block";
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!contactPopup.contains(e.target) && !menuBtn.contains(e.target)) {
+      contactPopup.style.display = "none";
+    }
+  });
+
+  // Disclaimer toggle
   function showDisclaimer() {
     document.getElementById('disclaimer-popup').style.display = 'block';
   }
@@ -138,42 +233,15 @@
 
   // Slider image pairs
   const imagePairs = [
-    {
-      before: "https://sahil-aditya.github.io/Creative_Gallery/images/before1.jpg",
-      after: "https://sahil-aditya.github.io/Creative_Gallery/images/after1.jpg"
-    },
-    {
-      before: "https://sahil-aditya.github.io/Creative_Gallery/images/before9.jpg",
-      after: "https://sahil-aditya.github.io/Creative_Gallery/images/after9.jpg"
-    },
-    {
-      before: "https://sahil-aditya.github.io/Creative_Gallery/images/before4.jpg",
-      after: "https://sahil-aditya.github.io/Creative_Gallery/images/after4.jpeg"
-    },
-    {
-      before: "https://sahil-aditya.github.io/Creative_Gallery/images/before2.jpg",
-      after: "https://sahil-aditya.github.io/Creative_Gallery/images/after2.jpg"
-    },
-    {
-      before: "https://sahil-aditya.github.io/Creative_Gallery/images/before6.jpg",
-      after: "https://sahil-aditya.github.io/Creative_Gallery/images/after6.jpg"
-    },
-    {
-      before: "https://sahil-aditya.github.io/Creative_Gallery/images/before5.jpg",
-      after: "https://sahil-aditya.github.io/Creative_Gallery/images/after5.jpg"
-    },
-    {
-      before: "https://sahil-aditya.github.io/Creative_Gallery/images/before7.jpg",
-      after: "https://sahil-aditya.github.io/Creative_Gallery/images/after7.jpg"
-    },
-    {
-     before: "https://sahil-aditya.github.io/Creative_Gallery/images/before8.jpg",
-     after: "https://sahil-aditya.github.io/Creative_Gallery/images/after8.jpg"
-    },
-    {
-     before: "https://sahil-aditya.github.io/Creative_Gallery/images/before3.jpg",
-     after: "https://sahil-aditya.github.io/Creative_Gallery/images/after3.jpg"
-    }
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before1.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after1.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before9.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after9.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before4.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after4.jpeg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before2.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after2.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before6.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after6.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before5.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after5.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before7.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after7.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before8.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after8.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before3.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after3.jpg" }
   ];
 
   const gallery = document.getElementById("gallery");
@@ -207,15 +275,11 @@
 
     handle.addEventListener("mousedown", () => dragging = true);
     window.addEventListener("mouseup", () => dragging = false);
-    window.addEventListener("mousemove", e => {
-      if (dragging) move(e.clientX);
-    });
+    window.addEventListener("mousemove", e => { if (dragging) move(e.clientX); });
 
     handle.addEventListener("touchstart", () => dragging = true);
     window.addEventListener("touchend", () => dragging = false);
-    window.addEventListener("touchmove", e => {
-      if (dragging) move(e.touches[0].clientX);
-    });
+    window.addEventListener("touchmove", e => { if (dragging) move(e.touches[0].clientX); });
   });
 </script>
 
