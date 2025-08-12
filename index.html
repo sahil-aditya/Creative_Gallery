@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Showcasing My Skills</title>
+<title>Creative Gallery</title>
 <style>
   body {
     background-color: #111;
@@ -12,40 +12,48 @@
     margin: 0;
     padding: 20px;
   }
+
+  /* Title */
   h1 {
     text-align: center;
     margin-bottom: 10px;
+    color: #c0abe1;
   }
-  /* Info icon label */
-  .label-bar {
-    text-align: center;
-    font-size: 14px;
-    margin-bottom: 20px;
-  }
+
+  /* Info icon top-right */
   .info-icon {
-    display: inline-block;
-    margin-left: 5px;
+    position: fixed;
+    top: 10px;
+    right: 15px;
+    font-size: 18px;
+    color: #c0abe1;
     cursor: pointer;
-    background: #444;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 4px 7px;
     border-radius: 50%;
-    padding: 2px 6px;
-    font-size: 12px;
+    z-index: 1000;
+    transition: background 0.3s;
   }
+  .info-icon:hover {
+    background: rgba(192, 171, 225, 0.3);
+  }
+
   /* Disclaimer popup */
   .popup {
     display: none;
     position: fixed;
-    bottom: 20px;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     max-width: 300px;
     background: #fff;
     color: #000;
-    padding: 10px 15px;
+    padding: 15px 20px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     font-size: 13px;
-    z-index: 999;
+    z-index: 2000;
+    text-align: center;
   }
   .popup button {
     background: #000;
@@ -53,8 +61,11 @@
     border: none;
     padding: 5px 10px;
     border-radius: 4px;
-    margin-top: 5px;
+    margin-top: 8px;
     cursor: pointer;
+  }
+  .popup button:hover {
+    background: #333;
   }
 
   /* Slider styles */
@@ -95,11 +106,11 @@
 </head>
 <body>
 
-<h1>Showcasing My Skills</h1>
-<div class="label-bar">
-  Color Grading Showcase 
-  <span class="info-icon" onclick="showDisclaimer()">ℹ️</span>
-</div>
+<!-- Info Icon -->
+<div class="info-icon" onclick="showDisclaimer()">ⓘ</div>
+
+<!-- Title -->
+<h1>Colorist | sahil.aditya_</h1>
 
 <!-- Disclaimer popup -->
 <div id="disclaimer-popup" class="popup">
@@ -156,12 +167,9 @@
     const move = (x) => {
       const rect = container.getBoundingClientRect();
       let offsetX = x - rect.left;
-
       if (offsetX < 0) offsetX = 0;
       if (offsetX > rect.width) offsetX = rect.width;
-
       const percent = (offsetX / rect.width) * 100;
-
       beforeImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
       handle.style.left = `${percent}%`;
     };
