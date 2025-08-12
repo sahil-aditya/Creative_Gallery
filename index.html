@@ -14,27 +14,62 @@
   }
   h1 {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
   }
+  /* Info icon label */
+  .label-bar {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .info-icon {
+    display: inline-block;
+    margin-left: 5px;
+    cursor: pointer;
+    background: #444;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+  /* Disclaimer popup */
+  .popup {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 300px;
+    background: #fff;
+    color: #000;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-size: 13px;
+    z-index: 999;
+  }
+  .popup button {
+    background: #000;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-top: 5px;
+    cursor: pointer;
+  }
+
+  /* Slider styles */
   .slider-container {
     max-width: 800px;
     margin: 40px auto;
     position: relative;
     overflow: hidden;
     border-radius: 10px;
-    user-select: none; /* prevent text selection while dragging */
+    user-select: none;
   }
-  .slider-img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-  /* After image */
   .after-img {
     display: block;
     width: 100%;
   }
-  /* Before image positioned absolutely */
   .before-img {
     position: absolute;
     top: 0;
@@ -42,8 +77,7 @@
     height: 100%;
     width: 100%;
     object-fit: cover;
-    /* Clip will be dynamically updated via JS */
-    clip-path: inset(0 50% 0 0); /* initially reveal left 50% */
+    clip-path: inset(0 50% 0 0);
     transition: clip-path 0.2s ease-out;
   }
   .handle {
@@ -62,10 +96,29 @@
 <body>
 
 <h1>Showcasing My Skills</h1>
+<div class="label-bar">
+  Color Grading Showcase 
+  <span class="info-icon" onclick="showDisclaimer()">ℹ️</span>
+</div>
+
+<!-- Disclaimer popup -->
+<div id="disclaimer-popup" class="popup">
+  <p>Disclaimer: Not every image here is clicked by me. Some are non-copyright images used only to demonstrate my color grading skills.</p>
+  <button onclick="closeDisclaimer()">Close</button>
+</div>
 
 <div id="gallery"></div>
 
 <script>
+  // Show/hide disclaimer
+  function showDisclaimer() {
+    document.getElementById('disclaimer-popup').style.display = 'block';
+  }
+  function closeDisclaimer() {
+    document.getElementById('disclaimer-popup').style.display = 'none';
+  }
+
+  // Slider image pairs
   const imagePairs = [
     {
       before: "https://sahil-aditya.github.io/Creative_Gallery/images/before1.jpg",
@@ -109,7 +162,6 @@
 
       const percent = (offsetX / rect.width) * 100;
 
-      // Clip the before image to reveal only left part up to the handle
       beforeImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
       handle.style.left = `${percent}%`;
     };
