@@ -1,2 +1,4 @@
 # Creative_Gallery
-Here you can see  | Before &amp; After |
+Here An Artist can show his raw transformation into art
+Image Gallery to Show
+| Before &amp; After |
