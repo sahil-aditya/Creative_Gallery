@@ -48,8 +48,8 @@
   /* Info icon (Disclaimer Button) */
   .info-icon {
     position: fixed;
-    top: 20px; /* Aligned with the top of the menu button */
-    left: 74px; /* Placed to the right of the menu button */
+    top: 20px;
+    left: 74px;
     font-size: 18px;
     color: #c0abe1;
     cursor: pointer;
@@ -118,16 +118,36 @@
     clip-path: inset(0 50% 0 0);
     transition: clip-path 0.2s ease-out;
   }
+  /* IMPROVED HANDLE STYLING */
   .handle {
     position: absolute;
     top: 0;
     left: 50%;
-    width: 4px;
+    width: 2px;
     height: 100%;
     background: #fff;
     cursor: ew-resize;
     transform: translateX(-50%);
     z-index: 10;
+  }
+  .handle::after {
+    content: '←';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 14px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+  }
+  .handle:hover::after {
+    transform: translate(-50%, -50%) scale(1.2);
   }
 
   /* Contact Menu Button */
@@ -223,9 +243,9 @@
   const menuBtn = document.getElementById('menu-btn');
   const contactPopup = document.getElementById('contact-popup');
   const phoneLink = document.getElementById('phone-link');
-  const infoIcon = document.querySelector('.info-icon'); // Select the info icon
+  const infoIcon = document.querySelector('.info-icon');
 
-  const phoneNumber = ""; // Add phone here if needed
+  const phoneNumber = "";
   if (phoneNumber) {
     phoneLink.href = "tel:" + phoneNumber;
     phoneLink.style.display = "block";
@@ -252,8 +272,8 @@
   // Fade buttons on scroll
   window.addEventListener('scroll', () => {
     if (window.scrollY > 100) {
-      menuBtn.style.opacity = '0'; // Completely fades away
-      infoIcon.style.opacity = '0'; // Completely fades away
+      menuBtn.style.opacity = '0';
+      infoIcon.style.opacity = '0';
     } else {
       menuBtn.style.opacity = '1';
       infoIcon.style.opacity = '1';
