@@ -45,11 +45,11 @@
     }
   }
 
-  /* Info icon top-right */
+  /* Info icon (Disclaimer Button) */
   .info-icon {
     position: fixed;
-    top: 20px; /* Adjusted top position to match the menu button */
-    right: 20px; /* Adjusted right position for better balance */
+    bottom: 20px; /* Moved to the bottom */
+    left: 20px; /* Aligned with the menu button on the left */
     font-size: 18px;
     color: #c0abe1;
     cursor: pointer;
@@ -57,7 +57,7 @@
     padding: 4px 7px;
     border-radius: 50%;
     z-index: 1000;
-    transition: background 0.3s;
+    transition: opacity 0.3s ease, background 0.3s; /* Added opacity transition */
   }
   .info-icon:hover {
     background: rgba(192, 171, 225, 0.3);
@@ -131,7 +131,7 @@
   /* Contact Menu Button */
   #menu-btn {
     position: fixed;
-    top: 20px; /* Moved up to match the info icon */
+    top: 20px;
     left: 20px;
     background: #222;
     border: none;
@@ -139,6 +139,7 @@
     cursor: pointer;
     border-radius: 8px;
     z-index: 9999;
+    transition: opacity 0.3s ease; /* Added opacity transition */
   }
   #menu-btn div {
     width: 20px;
@@ -220,6 +221,7 @@
   const menuBtn = document.getElementById('menu-btn');
   const contactPopup = document.getElementById('contact-popup');
   const phoneLink = document.getElementById('phone-link');
+  const infoIcon = document.querySelector('.info-icon'); // Select the info icon
 
   const phoneNumber = ""; // Add phone here if needed
   if (phoneNumber) {
@@ -232,7 +234,7 @@
   });
 
   document.addEventListener('click', (e) => {
-    if (!contactPopup.contains(e.target) && !menuBtn.contains(e.target)) {
+    if (!contactPopup.contains(e.target) && !menuBtn.contains(e.target) && !infoIcon.contains(e.target)) {
       contactPopup.style.display = "none";
     }
   });
@@ -244,6 +246,17 @@
   function closeDisclaimer() {
     document.getElementById('disclaimer-popup').style.display = 'none';
   }
+
+  // Fade buttons on scroll
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 100) {
+      menuBtn.style.opacity = '0.5';
+      infoIcon.style.opacity = '0.5';
+    } else {
+      menuBtn.style.opacity = '1';
+      infoIcon.style.opacity = '1';
+    }
+  });
 
   // Slider image pairs
   const imagePairs = [
