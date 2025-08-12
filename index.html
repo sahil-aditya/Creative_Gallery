@@ -250,8 +250,8 @@
   // Fade buttons on scroll
   window.addEventListener('scroll', () => {
     if (window.scrollY > 100) {
-      menuBtn.style.opacity = '0.5';
-      infoIcon.style.opacity = '0.5';
+      menuBtn.style.opacity = '0'; // Completely fades away
+      infoIcon.style.opacity = '0'; // Completely fades away
     } else {
       menuBtn.style.opacity = '1';
       infoIcon.style.opacity = '1';
