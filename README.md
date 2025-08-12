@@ -1,5 +1,5 @@
 # Creative_Gallery
 * Here, An Artist can Image his raw transformation into art
-* Imagellery to Show
+* Image Gallery to show
  
 | Before &amp; After |
