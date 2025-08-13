@@ -289,6 +289,7 @@
   const infoIcon = document.querySelector('.info-icon');
   const musicToggleBtn = document.getElementById('music-toggle-btn');
   const music = document.getElementById('background-music');
+  let hasPlayed = false;
 
   const phoneNumber = "";
   if (phoneNumber) {
@@ -338,18 +339,31 @@
     }
   });
 
-  // Check music state and set button icon on load
-  window.addEventListener('load', () => {
-    // This timeout gives the browser a moment to attempt autoplay
-    setTimeout(() => {
-      if (music.paused) {
-        musicToggleBtn.innerHTML = '🔇';
-      } else {
-        musicToggleBtn.innerHTML = '🔊';
-      }
-    }, 500);
+  // Initial autoplay attempt on page load
+  music.play().then(() => {
+    musicToggleBtn.innerHTML = '🔊';
+    hasPlayed = true;
+  }).catch(() => {
+    musicToggleBtn.innerHTML = '🔇';
+    hasPlayed = false;
   });
 
+  // Scroll event to trigger music if autoplay was blocked
+  const playOnScroll = () => {
+    if (!hasPlayed) {
+      music.play().then(() => {
+        musicToggleBtn.innerHTML = '🔊';
+        hasPlayed = true;
+      }).catch(error => {
+        console.log("Music play blocked by browser, even on scroll.");
+      });
+      // Remove the listener so this only happens once
+      window.removeEventListener('scroll', playOnScroll);
+    }
+  };
+
+  window.addEventListener('scroll', playOnScroll);
+  
   // Slider image pairs
   const imagePairs = [
     // IMPORTANT: Replace these links with your optimized, resized images to fix the lag.
