@@ -339,31 +339,40 @@
     }
   });
 
-  // Initial autoplay attempt on page load
+  // Music autoplay logic on load and first interaction
+  const handleUserInteraction = () => {
+    if (!hasPlayed) {
+      music.play().then(() => {
+        musicToggleBtn.innerHTML = '🔊';
+        hasPlayed = true;
+      }).catch(error => {
+        console.log("Music play blocked by browser.");
+        musicToggleBtn.innerHTML = '🔇';
+      });
+      // Remove listeners so this only happens once
+      const sliders = document.querySelectorAll('.slider-container');
+      sliders.forEach(slider => {
+        slider.removeEventListener('mousedown', handleUserInteraction);
+        slider.removeEventListener('touchstart', handleUserInteraction);
+      });
+    }
+  };
+
+  // Check music state on load and set button icon
   music.play().then(() => {
     musicToggleBtn.innerHTML = '🔊';
     hasPlayed = true;
   }).catch(() => {
     musicToggleBtn.innerHTML = '🔇';
     hasPlayed = false;
+    // If autoplay fails, attach listeners to sliders to trigger on first interaction
+    const sliders = document.querySelectorAll('.slider-container');
+    sliders.forEach(slider => {
+      slider.addEventListener('mousedown', handleUserInteraction);
+      slider.addEventListener('touchstart', handleUserInteraction);
+    });
   });
 
-  // Scroll event to trigger music if autoplay was blocked
-  const playOnScroll = () => {
-    if (!hasPlayed) {
-      music.play().then(() => {
-        musicToggleBtn.innerHTML = '🔊';
-        hasPlayed = true;
-      }).catch(error => {
-        console.log("Music play blocked by browser, even on scroll.");
-      });
-      // Remove the listener so this only happens once
-      window.removeEventListener('scroll', playOnScroll);
-    }
-  };
-
-  window.addEventListener('scroll', playOnScroll);
-  
   // Slider image pairs
   const imagePairs = [
     // IMPORTANT: Replace these links with your optimized, resized images to fix the lag.
