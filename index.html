@@ -104,13 +104,14 @@
     border-radius: 10px;
     user-select: none;
     transform: scale(0.98); 
+    /* Updated brightness and shadow for a more noticeable effect */
     transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.8s ease, box-shadow 0.8s ease;
-    filter: brightness(0.95);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    filter: brightness(0.85);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
   }
   
   .slider-container.in-focus {
-    transform: scale(1.06);
+    transform: scale(1.06); /* Keeping the scale at 1.06 as requested */
     filter: brightness(1);
     box-shadow: none;
   }
@@ -309,8 +310,7 @@
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before10.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after10.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before11.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after11.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before12.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after12.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before13.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after13.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before3.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after3.jpg" }
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before13.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after13.jpg" }
   ];
 
   const gallery = document.getElementById("gallery");
