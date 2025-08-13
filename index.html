@@ -314,7 +314,7 @@
   const musicBtn = document.getElementById('music-btn');
   let audio = null;
   let audioLoaded = false;
-  const musicSource = "https://sahil-aditya.github.io/Creative_Gallery/images/music.mp3"; // Corrected music path
+  const musicSource = "https://sahil-aditya.github.io/Creative_Gallery/images/music.mp3"; 
 
   musicBtn.addEventListener('click', () => {
     if (!audioLoaded) {
@@ -410,4 +410,21 @@
       if (elementCenter > focusZoneStart && elementCenter < focusZoneEnd) {
         container.classList.add('in-focus');
       } else {
-  
+        container.classList.remove('in-focus');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!isUpdatingFocus) {
+      window.requestAnimationFrame(updateFocus);
+      isUpdatingFocus = true;
+    }
+  });
+
+  // Run on page load to set initial focus
+  window.addEventListener('load', updateFocus);
+</script>
+
+</body>
+</html>
