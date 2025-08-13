@@ -103,7 +103,14 @@
     overflow: hidden;
     border-radius: 10px;
     user-select: none;
+    transform: scale(0.9); 
+    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
+  
+  .slider-container.in-focus {
+    transform: scale(1.08);
+  }
+
   .after-img {
     display: block;
     width: 100%;
@@ -285,6 +292,8 @@
 
   // Slider image pairs
   const imagePairs = [
+    // IMPORTANT: Replace these links with your optimized, resized images to fix the lag.
+    // Example: { before: "path/to/optimized/before1.jpg", after: "path/to/optimized/after1.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before1.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after1.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before9.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after9.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before4.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after4.jpeg" },
@@ -337,6 +346,40 @@
     window.addEventListener("touchend", () => dragging = false);
     window.addEventListener("touchmove", e => { if (dragging) move(e.touches[0].clientX); });
   });
+
+  // --- Performance-Optimized JS for focus effect ---
+  const sliderContainers = document.querySelectorAll('.slider-container');
+  let isUpdatingFocus = false;
+
+  function updateFocus() {
+    isUpdatingFocus = false;
+    const windowHeight = window.innerHeight;
+    // Define the focus zone in the middle of the viewport
+    const focusZoneStart = windowHeight * 0.3;
+    const focusZoneEnd = windowHeight * 0.7;
+
+    sliderContainers.forEach(container => {
+      const rect = container.getBoundingClientRect();
+      const elementCenter = rect.top + rect.height / 2;
+
+      // Check if the center of the element is within our focus zone
+      if (elementCenter > focusZoneStart && elementCenter < focusZoneEnd) {
+        container.classList.add('in-focus');
+      } else {
+        container.classList.remove('in-focus');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!isUpdatingFocus) {
+      window.requestAnimationFrame(updateFocus);
+      isUpdatingFocus = true;
+    }
+  });
+
+  // Run on page load to set initial focus
+  window.addEventListener('load', updateFocus);
 </script>
 
 </body>
