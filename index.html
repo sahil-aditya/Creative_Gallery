@@ -294,10 +294,8 @@
     }
   });
 
-  // Slider image pairs
+  // Slider image pairs (pre-filled from 1 to 100)
   const imagePairs = [
-    // IMPORTANT: Replace these links with your optimized, resized images to fix the lag.
-    // Example: { before: "path/to/optimized/before1.jpg", after: "path/to/optimized/after1.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before1.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after1.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before9.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after9.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before4.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after4.jpeg" },
@@ -310,81 +308,72 @@
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before11.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after11.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before12.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after12.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before13.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after13.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before3.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after3.jpg" }
-  ];
-
-  const gallery = document.getElementById("gallery");
-
-  imagePairs.forEach(pair => {
-    const container = document.createElement("div");
-    container.classList.add("slider-container");
-
-    container.innerHTML = `
-      <img src="${pair.after}" alt="After Image" class="after-img" />
-      <img src="${pair.before}" alt="Before Image" class="before-img" />
-      <div class="handle"></div>
-    `;
-
-    gallery.appendChild(container);
-
-    const beforeImg = container.querySelector(".before-img");
-    const handle = container.querySelector(".handle");
-
-    let dragging = false;
-
-    const move = (x) => {
-      const rect = container.getBoundingClientRect();
-      let offsetX = x - rect.left;
-      if (offsetX < 0) offsetX = 0;
-      if (offsetX > rect.width) offsetX = rect.width;
-      const percent = (offsetX / rect.width) * 100;
-      beforeImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
-      handle.style.left = `${percent}%`;
-    };
-
-    handle.addEventListener("mousedown", () => dragging = true);
-    window.addEventListener("mouseup", () => dragging = false);
-    window.addEventListener("mousemove", e => { if (dragging) move(e.clientX); });
-
-    handle.addEventListener("touchstart", () => dragging = true);
-    window.addEventListener("touchend", () => dragging = false);
-    window.addEventListener("touchmove", e => { if (dragging) move(e.touches[0].clientX); });
-  });
-
-  // --- Performance-Optimized JS for focus effect ---
-  const sliderContainers = document.querySelectorAll('.slider-container');
-  let isUpdatingFocus = false;
-
-  function updateFocus() {
-    isUpdatingFocus = false;
-    const windowHeight = window.innerHeight;
-    // Define the focus zone in the middle of the viewport
-    const focusZoneStart = windowHeight * 0.3;
-    const focusZoneEnd = windowHeight * 0.7;
-
-    sliderContainers.forEach(container => {
-      const rect = container.getBoundingClientRect();
-      const elementCenter = rect.top + rect.height / 2;
-
-      // Check if the center of the element is within our focus zone
-      if (elementCenter > focusZoneStart && elementCenter < focusZoneEnd) {
-        container.classList.add('in-focus');
-      } else {
-        container.classList.remove('in-focus');
-      }
-    });
-  }
-
-  window.addEventListener('scroll', () => {
-    if (!isUpdatingFocus) {
-      window.requestAnimationFrame(updateFocus);
-      isUpdatingFocus = true;
-    }
-  });
-
-  // Run on page load to set initial focus
-  window.addEventListener('load', updateFocus);
-</script>
-
-</body>
-</html>
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before3.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after3.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before14.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after14.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before15.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after15.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before16.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after16.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before17.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after17.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before18.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after18.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before19.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after19.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before20.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after20.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before21.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after21.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before22.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after22.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before23.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after23.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before24.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after24.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before25.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after25.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before26.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after26.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before27.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after27.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before28.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after28.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before29.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after29.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before30.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after30.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before31.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after31.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before32.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after32.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before33.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after33.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before34.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after34.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before35.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after35.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before36.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after36.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before37.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after37.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before38.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after38.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before39.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after39.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before40.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after40.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before41.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after41.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before42.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after42.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before43.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after43.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before44.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after44.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before45.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after45.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before46.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after46.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before47.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after47.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before48.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after48.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before49.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after49.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before50.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after50.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before51.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after51.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before52.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after52.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before53.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after53.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before54.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after54.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before55.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after55.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before56.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after56.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before57.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after57.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before58.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after58.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before59.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after59.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before60.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after60.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before61.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after61.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before62.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after62.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before63.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after63.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before64.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after64.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before65.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after65.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before66.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after66.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before67.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after67.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before68.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after68.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before69.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after69.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before70.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after70.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before71.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after71.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before72.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after72.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before73.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after73.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before74.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after74.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before75.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after75.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before76.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after76.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before77.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after77.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before78.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after78.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before79.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after79.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before80.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after80.jpg" },
+    { before: "http
