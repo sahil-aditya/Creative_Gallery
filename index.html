@@ -65,6 +65,28 @@
     background: #333;
   }
 
+  /* Mute/Unmute Button (White and small) */
+  #music-toggle-btn {
+    position: fixed;
+    top: 20px;
+    left: 130px; /* Positioned next to the info button */
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.15); /* Semi-transparent white */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle white border */
+    padding: 10px 12px;
+    border-radius: 8px;
+    z-index: 1000;
+    transition: opacity 0.3s ease, background 0.3s, border 0.3s;
+    text-align: center;
+    line-height: 18px;
+    font-family: inherit;
+  }
+  #music-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
   /* Disclaimer popup */
   .popup {
     display: none;
@@ -226,11 +248,18 @@
 </head>
 <body>
 
+<audio id="background-music" autoplay loop>
+  <source src="https://sahil-aditya.github.io/Creative_Gallery/images/music.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
 <button id="menu-btn">
   <div></div>
   <div></div>
   <div></div>
 </button>
+
+<button id="music-toggle-btn">♪</button>
 
 <div id="contact-popup">
   <h3>Get Your Photo Edited</h3>
@@ -258,6 +287,8 @@
   const contactPopup = document.getElementById('contact-popup');
   const phoneLink = document.getElementById('phone-link');
   const infoIcon = document.querySelector('.info-icon');
+  const musicToggleBtn = document.getElementById('music-toggle-btn');
+  const music = document.getElementById('background-music');
 
   const phoneNumber = "";
   if (phoneNumber) {
@@ -269,8 +300,19 @@
     contactPopup.style.display = (contactPopup.style.display === "block") ? "none" : "block";
   });
 
+  // Music toggle logic
+  musicToggleBtn.addEventListener('click', () => {
+    if (music.paused) {
+      music.play().catch(error => console.log("Music play blocked by browser."));
+      musicToggleBtn.textContent = '♪';
+    } else {
+      music.pause();
+      musicToggleBtn.textContent = '♫';
+    }
+  });
+
   document.addEventListener('click', (e) => {
-    if (!contactPopup.contains(e.target) && !menuBtn.contains(e.target) && !infoIcon.contains(e.target)) {
+    if (!contactPopup.contains(e.target) && !menuBtn.contains(e.target) && !infoIcon.contains(e.target) && !musicToggleBtn.contains(e.target)) {
       contactPopup.style.display = "none";
     }
   });
@@ -288,10 +330,24 @@
     if (window.scrollY > 100) {
       menuBtn.style.opacity = '0';
       infoIcon.style.opacity = '0';
+      musicToggleBtn.style.opacity = '0';
     } else {
       menuBtn.style.opacity = '1';
       infoIcon.style.opacity = '1';
+      musicToggleBtn.style.opacity = '1';
     }
+  });
+
+  // Check music state and set button icon on load
+  window.addEventListener('load', () => {
+    // This timeout gives the browser a moment to attempt autoplay
+    setTimeout(() => {
+      if (music.paused) {
+        musicToggleBtn.textContent = '♫';
+      } else {
+        musicToggleBtn.textContent = '♪';
+      }
+    }, 500);
   });
 
   // Slider image pairs
