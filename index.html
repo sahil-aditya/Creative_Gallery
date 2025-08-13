@@ -65,28 +65,6 @@
     background: #333;
   }
 
-  /* Mute/Unmute Button (White and small) */
-  #music-toggle-btn {
-    position: fixed;
-    top: 20px;
-    left: 130px; /* Positioned next to the info button */
-    font-size: 18px;
-    color: white;
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0.15); /* Semi-transparent white */
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle white border */
-    padding: 10px 12px;
-    border-radius: 8px;
-    z-index: 1000;
-    transition: opacity 0.3s ease, background 0.3s, border 0.3s;
-    text-align: center;
-    line-height: 18px;
-    font-family: inherit;
-  }
-  #music-toggle-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-
   /* Disclaimer popup */
   .popup {
     display: none;
@@ -186,11 +164,10 @@
     background: #333; /* Darker background on hover */
   }
 
-  /* Contact Menu Button */
-  #menu-btn {
+  /* Contact Menu Button & Music Button */
+  .control-btn {
     position: fixed;
     top: 20px;
-    left: 20px;
     background: #222;
     border: none;
     padding: 10px 12px;
@@ -198,12 +175,25 @@
     border-radius: 8px;
     z-index: 9999;
     transition: opacity 0.3s ease;
+    color: white;
+    font-size: 12px;
+  }
+  .control-btn:hover {
+    background: #333;
+  }
+
+  #menu-btn {
+    left: 20px;
   }
   #menu-btn div {
     width: 20px;
     height: 2px;
     background: white;
     margin: 4px 0;
+  }
+  
+  #music-btn {
+    right: 20px;
   }
 
   /* Contact Popup */
@@ -248,18 +238,15 @@
 </head>
 <body>
 
-<audio id="background-music" autoplay loop>
-  <source src="https://sahil-aditya.github.io/Creative_Gallery/images/music.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
-
-<button id="menu-btn">
+<button id="menu-btn" class="control-btn">
   <div></div>
   <div></div>
   <div></div>
 </button>
 
-<button id="music-toggle-btn" title="Toggle music">🔊</button>
+<button id="music-btn" class="control-btn">
+  Tap to Play
+</button>
 
 <div id="contact-popup">
   <h3>Get Your Photo Edited</h3>
@@ -287,9 +274,6 @@
   const contactPopup = document.getElementById('contact-popup');
   const phoneLink = document.getElementById('phone-link');
   const infoIcon = document.querySelector('.info-icon');
-  const musicToggleBtn = document.getElementById('music-toggle-btn');
-  const music = document.getElementById('background-music');
-  let hasPlayed = false;
 
   const phoneNumber = "";
   if (phoneNumber) {
@@ -301,19 +285,8 @@
     contactPopup.style.display = (contactPopup.style.display === "block") ? "none" : "block";
   });
 
-  // Music toggle logic
-  musicToggleBtn.addEventListener('click', () => {
-    if (music.paused) {
-      music.play().catch(error => console.log("Music play blocked by browser."));
-      musicToggleBtn.innerHTML = '🔊';
-    } else {
-      music.pause();
-      musicToggleBtn.innerHTML = '🔇';
-    }
-  });
-
   document.addEventListener('click', (e) => {
-    if (!contactPopup.contains(e.target) && !menuBtn.contains(e.target) && !infoIcon.contains(e.target) && !musicToggleBtn.contains(e.target)) {
+    if (!contactPopup.contains(e.target) && !menuBtn.contains(e.target) && !infoIcon.contains(e.target)) {
       contactPopup.style.display = "none";
     }
   });
@@ -331,52 +304,40 @@
     if (window.scrollY > 100) {
       menuBtn.style.opacity = '0';
       infoIcon.style.opacity = '0';
-      musicToggleBtn.style.opacity = '0';
     } else {
       menuBtn.style.opacity = '1';
       infoIcon.style.opacity = '1';
-      musicToggleBtn.style.opacity = '1';
     }
   });
+  
+  // New JavaScript for music button
+  const musicBtn = document.getElementById('music-btn');
+  let audio = null;
+  let audioLoaded = false;
+  const musicSource = "https://sahil-aditya.github.io/Creative_Gallery/images/music.mp3"; // Corrected music path
 
-  // Music autoplay logic on load and first interaction
-  const handleUserInteraction = () => {
-    if (!hasPlayed) {
-      music.play().then(() => {
-        musicToggleBtn.innerHTML = '🔊';
-        hasPlayed = true;
-      }).catch(error => {
-        console.log("Music play blocked by browser.");
-        musicToggleBtn.innerHTML = '🔇';
-      });
-      // Remove listeners so this only happens once
-      const sliders = document.querySelectorAll('.slider-container');
-      sliders.forEach(slider => {
-        slider.removeEventListener('mousedown', handleUserInteraction);
-        slider.removeEventListener('touchstart', handleUserInteraction);
-      });
+  musicBtn.addEventListener('click', () => {
+    if (!audioLoaded) {
+      // Create and load the audio element for the first time
+      audio = new Audio(musicSource);
+      audio.loop = true; // Loop the music
+      audio.play();
+      audioLoaded = true;
+      musicBtn.textContent = 'Tap to Mute';
+    } else {
+      // If audio is already loaded, toggle play/pause
+      if (audio.paused) {
+        audio.play();
+        musicBtn.textContent = 'Tap to Mute';
+      } else {
+        audio.pause();
+        musicBtn.textContent = 'Tap to Play';
+      }
     }
-  };
-
-  // Check music state on load and set button icon
-  music.play().then(() => {
-    musicToggleBtn.innerHTML = '🔊';
-    hasPlayed = true;
-  }).catch(() => {
-    musicToggleBtn.innerHTML = '🔇';
-    hasPlayed = false;
-    // If autoplay fails, attach listeners to sliders to trigger on first interaction
-    const sliders = document.querySelectorAll('.slider-container');
-    sliders.forEach(slider => {
-      slider.addEventListener('mousedown', handleUserInteraction);
-      slider.addEventListener('touchstart', handleUserInteraction);
-    });
   });
 
   // Slider image pairs
   const imagePairs = [
-    // IMPORTANT: Replace these links with your optimized, resized images to fix the lag.
-    // Example: { before: "path/to/optimized/before1.jpg", after: "path/to/optimized/after1.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before1.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after1.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before9.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after9.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before4.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after4.jpeg" },
@@ -449,21 +410,4 @@
       if (elementCenter > focusZoneStart && elementCenter < focusZoneEnd) {
         container.classList.add('in-focus');
       } else {
-        container.classList.remove('in-focus');
-      }
-    });
-  }
-
-  window.addEventListener('scroll', () => {
-    if (!isUpdatingFocus) {
-      window.requestAnimationFrame(updateFocus);
-      isUpdatingFocus = true;
-    }
-  });
-
-  // Run on page load to set initial focus
-  window.addEventListener('load', updateFocus);
-</script>
-
-</body>
-</html>
+  
