@@ -174,7 +174,7 @@
     cursor: pointer;
     border-radius: 8px;
     z-index: 9999;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, background 0.3s, width 0.3s, padding 0.3s, border-radius 0.3s, transform 0.3s;
     color: white;
     font-size: 12px;
   }
@@ -191,9 +191,35 @@
     background: white;
     margin: 4px 0;
   }
-  
+
   #music-btn {
     right: 20px;
+  }
+
+  /* Music button states on scroll */
+  #music-btn.scrolled {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    background: #222;
+    opacity: 0.6;
+    transform: scale(0.9);
+  }
+  #music-btn.scrolled:hover {
+    opacity: 1;
+    transform: scale(1);
+    background: #333;
+  }
+
+  /* Music button icon styling */
+  #music-btn.scrolled img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+  }
+  #music-btn:not(.scrolled) img {
+    display: none;
   }
 
   /* Contact Popup */
@@ -245,7 +271,8 @@
 </button>
 
 <button id="music-btn" class="control-btn">
-  Tap to Play
+  <span class="music-text">Tap to Play</span>
+  <img src="https://www.flaticon.com/free-icon/speaker-filled-audio-tool_59284?term=unmute&page=1&position=7&origin=search&related_id=59284" alt="Play/Unmute" class="music-icon" />
 </button>
 
 <div id="contact-popup">
@@ -300,38 +327,50 @@
   }
 
   // Fade buttons on scroll
+  const musicBtn = document.getElementById('music-btn');
+  const musicText = musicBtn.querySelector('.music-text');
+  const musicIcon = musicBtn.querySelector('.music-icon');
+
   window.addEventListener('scroll', () => {
     if (window.scrollY > 100) {
       menuBtn.style.opacity = '0';
       infoIcon.style.opacity = '0';
+      musicBtn.classList.add('scrolled');
+      musicText.style.display = 'none';
+      musicIcon.style.display = 'block';
     } else {
       menuBtn.style.opacity = '1';
       infoIcon.style.opacity = '1';
+      musicBtn.classList.remove('scrolled');
+      musicText.style.display = 'block';
+      musicIcon.style.display = 'none';
     }
   });
   
-  // New JavaScript for music button
-  const musicBtn = document.getElementById('music-btn');
+  // New JavaScript for music button functionality
   let audio = null;
   let audioLoaded = false;
   const musicSource = "https://sahil-aditya.github.io/Creative_Gallery/images/music.mp3"; 
+  const muteIconSrc = "https://www.flaticon.com/free-icon/mute_4620033?term=unmute&page=1&position=8&origin=search&related_id=4620033";
+  const unmuteIconSrc = "https://www.flaticon.com/free-icon/speaker-filled-audio-tool_59284?term=unmute&page=1&position=7&origin=search&related_id=59284";
 
   musicBtn.addEventListener('click', () => {
     if (!audioLoaded) {
-      // Create and load the audio element for the first time
       audio = new Audio(musicSource);
-      audio.loop = true; // Loop the music
+      audio.loop = true;
       audio.play();
       audioLoaded = true;
-      musicBtn.textContent = 'Tap to Mute';
+      musicText.textContent = 'Tap to Mute';
+      musicIcon.src = muteIconSrc;
     } else {
-      // If audio is already loaded, toggle play/pause
       if (audio.paused) {
         audio.play();
-        musicBtn.textContent = 'Tap to Mute';
+        musicText.textContent = 'Tap to Mute';
+        musicIcon.src = muteIconSrc;
       } else {
         audio.pause();
-        musicBtn.textContent = 'Tap to Play';
+        musicText.textContent = 'Tap to Play';
+        musicIcon.src = unmuteIconSrc;
       }
     }
   });
