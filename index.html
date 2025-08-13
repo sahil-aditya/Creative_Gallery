@@ -314,34 +314,66 @@
   ];
 
   const gallery = document.getElementById("gallery");
+  let imagesLoadedCount = 0;
+  
+  // Create a function for the animation logic to be called later
+  function runAnimations() {
+    const sliderContainers = document.querySelectorAll('.slider-container');
+    let isUpdatingFocus = false;
 
-  // --- BEGIN NEW IMAGE ERROR HANDLING LOGIC ---
+    function updateFocus() {
+      isUpdatingFocus = false;
+      const windowHeight = window.innerHeight;
+      const focusZoneStart = windowHeight * 0.3;
+      const focusZoneEnd = windowHeight * 0.7;
+
+      sliderContainers.forEach(container => {
+        const rect = container.getBoundingClientRect();
+        const elementCenter = rect.top + rect.height / 2;
+
+        if (elementCenter > focusZoneStart && elementCenter < focusZoneEnd) {
+          container.classList.add('in-focus');
+        } else {
+          container.classList.remove('in-focus');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!isUpdatingFocus) {
+        window.requestAnimationFrame(updateFocus);
+        isUpdatingFocus = true;
+      }
+    });
+
+    window.addEventListener('load', updateFocus);
+    updateFocus(); // Initial call to set focus on load
+  }
+
+  // A counter to keep track of how many image pairs have been processed
+  const totalImagePairs = imagePairs.length;
+  let processedPairs = 0;
+
   imagePairs.forEach(pair => {
-    // Create temporary Image objects to check for successful loading
     const beforeImg = new Image();
     const afterImg = new Image();
     let beforeLoaded = false;
     let afterLoaded = false;
     
-    // A flag to prevent duplicate container creation
     let containerCreated = false;
 
-    // This function will run only when BOTH images have loaded
     const onBothImagesLoaded = () => {
       if (beforeLoaded && afterLoaded && !containerCreated) {
         containerCreated = true;
         const container = document.createElement("div");
         container.classList.add("slider-container");
-
-        // Use a template literal to construct the HTML for the slider
         container.innerHTML = `
           <img src="${pair.after}" alt="After Image" class="after-img" />
           <img src="${pair.before}" alt="Before Image" class="before-img" />
           <div class="handle"></div>
         `;
-
         gallery.appendChild(container);
-
+        
         const beforeImgElement = container.querySelector(".before-img");
         const handle = container.querySelector(".handle");
 
@@ -367,54 +399,37 @@
       }
     };
 
-    // If any image fails to load, the `onBothImagesLoaded` function will never be fully satisfied,
-    // and the container will not be added to the gallery.
-    beforeImg.onerror = () => { console.error(`Error loading before image: ${pair.before}`); };
-    afterImg.onerror = () => { console.error(`Error loading after image: ${pair.after}`); };
-    
-    beforeImg.onload = () => { beforeLoaded = true; onBothImagesLoaded(); };
-    afterImg.onload = () => { afterLoaded = true; onBothImagesLoaded(); };
+    const handleLoadComplete = () => {
+        processedPairs++;
+        if (processedPairs === totalImagePairs) {
+            // Once all pairs are processed (loaded or failed), run the animations
+            runAnimations();
+        }
+    };
 
-    // Start loading the images
+    beforeImg.onerror = () => { 
+        console.error(`Error loading before image: ${pair.before}`);
+        handleLoadComplete();
+    };
+    afterImg.onerror = () => { 
+        console.error(`Error loading after image: ${pair.after}`);
+        handleLoadComplete();
+    };
+    
+    beforeImg.onload = () => { 
+        beforeLoaded = true; 
+        onBothImagesLoaded();
+        handleLoadComplete();
+    };
+    afterImg.onload = () => { 
+        afterLoaded = true; 
+        onBothImagesLoaded();
+        handleLoadComplete();
+    };
+
     beforeImg.src = pair.before;
     afterImg.src = pair.after;
   });
-  // --- END NEW IMAGE ERROR HANDLING LOGIC ---
-
-
-  // --- Performance-Optimized JS for focus effect ---
-  const sliderContainers = document.querySelectorAll('.slider-container');
-  let isUpdatingFocus = false;
-
-  function updateFocus() {
-    isUpdatingFocus = false;
-    const windowHeight = window.innerHeight;
-    // Define the focus zone in the middle of the viewport
-    const focusZoneStart = windowHeight * 0.3;
-    const focusZoneEnd = windowHeight * 0.7;
-
-    sliderContainers.forEach(container => {
-      const rect = container.getBoundingClientRect();
-      const elementCenter = rect.top + rect.height / 2;
-
-      // Check if the center of the element is within our focus zone
-      if (elementCenter > focusZoneStart && elementCenter < focusZoneEnd) {
-        container.classList.add('in-focus');
-      } else {
-        container.classList.remove('in-focus');
-      }
-    });
-  }
-
-  window.addEventListener('scroll', () => {
-    if (!isUpdatingFocus) {
-      window.requestAnimationFrame(updateFocus);
-      isUpdatingFocus = true;
-    }
-  });
-
-  // Run on page load to set initial focus
-  window.addEventListener('load', updateFocus);
 </script>
 
 </body>
