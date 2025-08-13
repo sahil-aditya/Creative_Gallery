@@ -103,16 +103,7 @@
     overflow: hidden;
     border-radius: 10px;
     user-select: none;
-    /* NEW: Default scale is slightly smaller */
-    transform: scale(0.98); 
-    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-  
-  /* Class to apply to the focused image, making it slightly bigger */
-  .slider-container.in-focus {
-    transform: scale(1.02);
-  }
-
   .after-img {
     display: block;
     width: 100%;
@@ -345,30 +336,6 @@
     handle.addEventListener("touchstart", () => dragging = true);
     window.addEventListener("touchend", () => dragging = false);
     window.addEventListener("touchmove", e => { if (dragging) move(e.touches[0].clientX); });
-  });
-
-  // --- NEW JS for focus effect ---
-  const sliderContainers = document.querySelectorAll('.slider-container');
-
-  const focusObserverOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.8 // Trigger when 80% of the element is visible (i.e., it's "in focus")
-  };
-
-  const focusObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      // Focus animation
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-focus');
-      } else {
-        entry.target.classList.remove('in-focus');
-      }
-    });
-  }, focusObserverOptions);
-
-  sliderContainers.forEach(container => {
-    focusObserver.observe(container);
   });
 </script>
 
