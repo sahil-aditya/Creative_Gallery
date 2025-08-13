@@ -6,21 +6,20 @@
 <title>Creative Gallery</title>
 <style>
   body {
-    /* Updated background with more black and less grey */
-    background: linear-gradient(-45deg, #000, #111, #000, #222);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-
+    background-color: #111;
     color: white;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
+
+    /* Breathing animation */
+    animation: breathing-bg 12s ease-in-out infinite alternate;
   }
 
-  @keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+  @keyframes breathing-bg {
+    0%   { background-color: #0e0e0e; }
+    50%  { background-color: #1a1a1a; }
+    100% { background-color: #141414; }
   }
 
   /* Title */
@@ -139,7 +138,8 @@
     clip-path: inset(0 50% 0 0);
     transition: clip-path 0.2s ease-out;
   }
-  /* IMPROVED HANDLE STYLING */
+
+  /* Handle styling */
   .handle {
     position: absolute;
     top: 0;
@@ -152,26 +152,26 @@
     z-index: 10;
   }
   .handle::before {
-    content: '←'; /* The arrow itself */
+    content: '←';
     position: absolute;
     top: 50%;
-    left: -25px; /* Positioned to the left of the slider line */
+    left: -25px;
     transform: translateY(-50%);
     color: #fff;
     font-size: 14px;
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: #111; /* Background to make it stand out */
-    border: 1px solid #fff; /* A subtle white border */
+    background: #111;
+    border: 1px solid #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: transform 0.2s ease, background 0.2s ease;
   }
   .handle:hover::before {
-    transform: translateY(-50%) scale(1.2); /* Scale up on hover */
-    background: #333; /* Darker background on hover */
+    transform: translateY(-50%) scale(1.2);
+    background: #333;
   }
 
   /* Contact Menu Button */
@@ -234,167 +234,3 @@
   }
 </style>
 </head>
-<body>
-
-<button id="menu-btn">
-  <div></div>
-  <div></div>
-  <div></div>
-</button>
-
-<div id="contact-popup">
-  <h3>Get Your Photo Edited</h3>
-  <p>Contact Us</p>
-  <a href="https://www.instagram.com/sahil.aditya_" target="_blank">📩 DM on Instagram</a>
-  <a href="mailto:sahilmaurya321@outlook.in">✉️ Send Email</a>
-  <a id="phone-link" href="#" style="display:none;">📞 Call</a>
-</div>
-
-<div class="info-icon" onclick="showDisclaimer()">ⓘ</div>
-
-<h1>Showcasing My Skills</h1>
-<h3>Colorist | sahil.aditya_</h3>
-
-<div id="disclaimer-popup" class="popup">
-  <p>Disclaimer: Not every image here is clicked by me. Some are non-copyright images used only to demonstrate my color grading skills.</p>
-  <button onclick="closeDisclaimer()">Close</button>
-</div>
-
-<div id="gallery"></div>
-
-<script>
-  // Contact menu toggle
-  const menuBtn = document.getElementById('menu-btn');
-  const contactPopup = document.getElementById('contact-popup');
-  const phoneLink = document.getElementById('phone-link');
-  const infoIcon = document.querySelector('.info-icon');
-
-  const phoneNumber = "";
-  if (phoneNumber) {
-    phoneLink.href = "tel:" + phoneNumber;
-    phoneLink.style.display = "block";
-  }
-
-  menuBtn.addEventListener('click', () => {
-    contactPopup.style.display = (contactPopup.style.display === "block") ? "none" : "block";
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!contactPopup.contains(e.target) && !menuBtn.contains(e.target) && !infoIcon.contains(e.target)) {
-      contactPopup.style.display = "none";
-    }
-  });
-
-  // Disclaimer toggle
-  function showDisclaimer() {
-    document.getElementById('disclaimer-popup').style.display = 'block';
-  }
-  function closeDisclaimer() {
-    document.getElementById('disclaimer-popup').style.display = 'none';
-  }
-
-  // Fade buttons on scroll
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
-      menuBtn.style.opacity = '0';
-      infoIcon.style.opacity = '0';
-    } else {
-      menuBtn.style.opacity = '1';
-      infoIcon.style.opacity = '1';
-    }
-  });
-
-  // Slider image pairs
-  const imagePairs = [
-    // IMPORTANT: Replace these links with your optimized, resized images to fix the lag.
-    // Example: { before: "path/to/optimized/before1.jpg", after: "path/to/optimized/after1.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before1.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after1.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before9.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after9.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before4.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after4.jpeg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before2.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after2.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before6.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after6.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before5.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after5.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before7.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after7.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before8.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after8.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before10.jpg", after: "https://sahil-aditya.io/Creative_Gallery/images/after10.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before11.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after11.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before12.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after12.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before13.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after13.jpg" },
-    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before3.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after3.jpg" }
-  ];
-
-  const gallery = document.getElementById("gallery");
-
-  imagePairs.forEach(pair => {
-    const container = document.createElement("div");
-    container.classList.add("slider-container");
-
-    container.innerHTML = `
-      <img src="${pair.after}" alt="After Image" class="after-img" />
-      <img src="${pair.before}" alt="Before Image" class="before-img" />
-      <div class="handle"></div>
-    `;
-
-    gallery.appendChild(container);
-
-    const beforeImg = container.querySelector(".before-img");
-    const handle = container.querySelector(".handle");
-
-    let dragging = false;
-
-    const move = (x) => {
-      const rect = container.getBoundingClientRect();
-      let offsetX = x - rect.left;
-      if (offsetX < 0) offsetX = 0;
-      if (offsetX > rect.width) offsetX = rect.width;
-      const percent = (offsetX / rect.width) * 100;
-      beforeImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
-      handle.style.left = `${percent}%`;
-    };
-
-    handle.addEventListener("mousedown", () => dragging = true);
-    window.addEventListener("mouseup", () => dragging = false);
-    window.addEventListener("mousemove", e => { if (dragging) move(e.clientX); });
-
-    handle.addEventListener("touchstart", () => dragging = true);
-    window.addEventListener("touchend", () => dragging = false);
-    window.addEventListener("touchmove", e => { if (dragging) move(e.touches[0].clientX); });
-  });
-
-  // --- Performance-Optimized JS for focus effect ---
-  const sliderContainers = document.querySelectorAll('.slider-container');
-  let isUpdatingFocus = false;
-
-  function updateFocus() {
-    isUpdatingFocus = false;
-    const windowHeight = window.innerHeight;
-    // Define the focus zone in the middle of the viewport
-    const focusZoneStart = windowHeight * 0.3;
-    const focusZoneEnd = windowHeight * 0.7;
-
-    sliderContainers.forEach(container => {
-      const rect = container.getBoundingClientRect();
-      const elementCenter = rect.top + rect.height / 2;
-
-      // Check if the center of the element is within our focus zone
-      if (elementCenter > focusZoneStart && elementCenter < focusZoneEnd) {
-        container.classList.add('in-focus');
-      } else {
-        container.classList.remove('in-focus');
-      }
-    });
-  }
-
-  window.addEventListener('scroll', () => {
-    if (!isUpdatingFocus) {
-      window.requestAnimationFrame(updateFocus);
-      isUpdatingFocus = true;
-    }
-  });
-
-  // Run on page load to set initial focus
-  window.addEventListener('load', updateFocus);
-</script>
-
-</body>
-</html>
