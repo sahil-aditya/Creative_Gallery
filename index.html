@@ -103,6 +103,19 @@
     overflow: hidden;
     border-radius: 10px;
     user-select: none;
+    /* --- NEW CSS for scroll animation and focus effect --- */
+    transform: translateY(50px) scale(0.95);
+    opacity: 0;
+    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  /* Class to apply when the element is in view */
+  .slider-container.in-view {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  /* Class to apply to the focused image */
+  .slider-container.in-focus {
+    transform: scale(1.02);
   }
   .after-img {
     display: block;
@@ -337,7 +350,52 @@
     window.addEventListener("touchend", () => dragging = false);
     window.addEventListener("touchmove", e => { if (dragging) move(e.touches[0].clientX); });
   });
+
+  // --- NEW JS for scroll animations and focus effect ---
+  const sliderContainers = document.querySelectorAll('.slider-container');
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.3 // Trigger when 30% of the element is visible
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      // Fade-in animation
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        // observer.unobserve(entry.target); // Uncomment this line if you only want the animation to run once
+      } else {
+        // Optional: Remove 'in-view' class when not intersecting to allow repeated animation on scroll
+        entry.target.classList.remove('in-view');
+      }
+    });
+  }, observerOptions);
+
+  const focusObserverOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.8 // Trigger when 80% of the element is visible (i.e., it's "in focus")
+  };
+
+  const focusObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      // Focus animation
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-focus');
+      } else {
+        entry.target.classList.remove('in-focus');
+      }
+    });
+  }, focusObserverOptions);
+
+  sliderContainers.forEach(container => {
+    observer.observe(container);
+    focusObserver.observe(container);
+  });
 </script>
 
 </body>
-</html>
+  </html>
+  
