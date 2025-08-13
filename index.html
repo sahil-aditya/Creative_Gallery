@@ -213,52 +213,17 @@
   }
 
   /* Music button icon styling */
-  #music-btn.scrolled img {
+  #music-btn.scrolled .music-icon {
+    display: block;
+  }
+  #music-btn.scrolled .music-text {
+    display: none;
+  }
+  .music-icon {
     width: 20px;
     height: 20px;
     vertical-align: middle;
-  }
-  #music-btn:not(.scrolled) img {
     display: none;
-  }
-
-  /* Contact Popup */
-  #contact-popup {
-    position: fixed;
-    top: 60px;
-    left: 20px;
-    background: #111;
-    color: white;
-    border-radius: 10px;
-    padding: 15px;
-    width: 220px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    display: none;
-    z-index: 10000;
-  }
-  #contact-popup h3 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: bold;
-  }
-  #contact-popup p {
-    margin: 4px 0 12px;
-    font-size: 13px;
-    color: #ccc;
-  }
-  #contact-popup a {
-    display: block;
-    padding: 8px;
-    margin-top: 5px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 14px;
-    background: #222;
-    color: white;
-    transition: background 0.3s;
-  }
-  #contact-popup a:hover {
-    background: #333;
   }
 </style>
 </head>
@@ -272,7 +237,7 @@
 
 <button id="music-btn" class="control-btn">
   <span class="music-text">Tap to Play</span>
-  <img src="https://www.flaticon.com/free-icon/speaker-filled-audio-tool_59284?term=unmute&page=1&position=7&origin=search&related_id=59284" alt="Play/Unmute" class="music-icon" />
+  <img src="https://sahil-aditya.github.io/Creative_Gallery/images/play.png" alt="Play/Unmute" class="music-icon" />
 </button>
 
 <div id="contact-popup">
@@ -351,8 +316,8 @@
   let audio = null;
   let audioLoaded = false;
   const musicSource = "https://sahil-aditya.github.io/Creative_Gallery/images/music.mp3"; 
-  const muteIconSrc = "https://www.flaticon.com/free-icon/mute_4620033?term=unmute&page=1&position=8&origin=search&related_id=4620033";
-  const unmuteIconSrc = "https://www.flaticon.com/free-icon/speaker-filled-audio-tool_59284?term=unmute&page=1&position=7&origin=search&related_id=59284";
+  const muteIconSrc = "https://sahil-aditya.github.io/Creative_Gallery/images/mute.png";
+  const playIconSrc = "https://sahil-aditya.github.io/Creative_Gallery/images/play.png";
 
   musicBtn.addEventListener('click', () => {
     if (!audioLoaded) {
@@ -370,7 +335,7 @@
       } else {
         audio.pause();
         musicText.textContent = 'Tap to Play';
-        musicIcon.src = unmuteIconSrc;
+        musicIcon.src = playIconSrc;
       }
     }
   });
