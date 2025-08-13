@@ -1,387 +1,386 @@
- <!doctype html>
- <html lang="en">
- <head>
- <meta charset="utf-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1" />
- <title>creative gallery</title>
- <style>
-   body {
-     background-color: #111;
-     color: white;
-     font-family: arial, sans-serif;
-     margin: 0;
-     padding: 20px;
-   }
- 
-   /* title */
-   h1 {
-     text-align: center;
-     margin-bottom: 5px;
-     color: white;
-     font-size: clamp(1.5rem, 3vw, 2rem);
-     letter-spacing: 1px;
-     opacity: 0;
-     transform: translatey(10px);
-     animation: fadeup 1s ease forwards;
-     margin-top: 50px;
-   }
-   h3 {
-     text-align: center;
-     color: #c0abe1;
-     font-weight: normal;
-     margin-top: 0;
-     font-size: clamp(0.9rem, 2vw, 1.1rem);
-     opacity: 0;
-     transform: translatey(10px);
-     animation: fadeup 1s ease forwards;
-     animation-delay: 0.2s;
-   }
- 
-   /* fade-up animation */
-   @keyframes fadeup {
-     to {
-       opacity: 1;
-       transform: translatey(0);
-     }
-   }
- 
-   /* info icon (disclaimer button) */
-   .info-icon {
-     position: fixed;
-     top: 20px;
-     left: 74px;
-     font-size: 18px;
-     color: #c0abe1;
-     cursor: pointer;
-     background: #222;
-     padding: 10px 12px;
-     border-radius: 8px;
-     z-index: 1000;
-     transition: opacity 0.3s ease, background 0.3s;
-     text-align: center;
-     line-height: 18px;
-   }
-   .info-icon:hover {
-     background: #333;
-   }
- 
-   /* disclaimer popup */
-   .popup {
-     display: none;
-     position: fixed;
-     top: 50%;
-     left: 50%;
-     transform: translate(-50%, -50%);
-     max-width: 300px;
-     background: #fff;
-     color: #000;
-     padding: 15px 20px;
-     border-radius: 8px;
-     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-     font-size: 13px;
-     z-index: 2000;
-     text-align: center;
-   }
-   .popup button {
-     background: #000;
-     color: white;
-     border: none;
-     padding: 5px 10px;
-     border-radius: 4px;
-     margin-top: 8px;
-     cursor: pointer;
-   }
-   .popup button:hover {
-     background: #333;
-   }
- 
-   /* slider styles */
-   .slider-container {
-     max-width: 800px;
-     margin: 40px auto;
-     position: relative;
-     overflow: hidden;
-     border-radius: 10px;
-     user-select: none;
-     transform: scale(0.98);
-     transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-   }
-   
-   .slider-container.in-focus {
-     transform: scale(1.03); /* Slightly increased scale for focused image */
-   }
- 
-   .after-img {
-     display: block;
-     width: 100%;
-   }
-   .before-img {
-     position: absolute;
-     top: 0;
-     left: 0;
-     height: 100%;
-     width: 100%;
-     object-fit: cover;
-     clip-path: inset(0 50% 0 0);
-     transition: clip-path 0.2s ease-out;
-   }
-   /* improved handle styling */
-   .handle {
-     position: absolute;
-     top: 0;
-     left: 50%;
-     width: 2px;
-     height: 100%;
-     background: #fff;
-     cursor: ew-resize;
-     transform: translatex(-50%);
-     z-index: 10;
-   }
-   .handle::before {
-     content: '←'; /* the arrow itself */
-     position: absolute;
-     top: 50%;
-     left: -25px; /* positioned to the left of the slider line */
-     transform: translatey(-50%);
-     color: #fff;
-     font-size: 14px;
-     width: 18px;
-     height: 18px;
-     border-radius: 50%;
-     background: #111; /* background to make it stand out */
-     border: 1px solid #fff; /* a subtle white border */
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     transition: transform 0.2s ease, background 0.2s ease;
-   }
-   .handle:hover::before {
-     transform: translatey(-50%) scale(1.2); /* scale up on hover */
-     background: #333; /* darker background on hover */
-   }
- 
-   /* contact menu button */
-   #menu-btn {
-     position: fixed;
-     top: 20px;
-     left: 20px;
-     background: #222;
-     border: none;
-     padding: 10px 12px;
-     cursor: pointer;
-     border-radius: 8px;
-     z-index: 9999;
-     transition: opacity 0.3s ease;
-   }
-   #menu-btn div {
-     width: 20px;
-     height: 2px;
-     background: white;
-     margin: 4px 0;
-   }
- 
-   /* contact popup */
-   #contact-popup {
-     position: fixed;
-     top: 60px;
-     left: 20px;
-     background: #111;
-     color: white;
-     border-radius: 10px;
-     padding: 15px;
-     width: 220px;
-     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-     display: none;
-     z-index: 10000;
-   }
-   #contact-popup h3 {
-     margin: 0;
-     font-size: 16px;
-     font-weight: bold;
-   }
-   #contact-popup p {
-     margin: 4px 0 12px;
-     font-size: 13px;
-     color: #ccc;
-   }
-   #contact-popup a {
-     display: block;
-     padding: 8px;
-     margin-top: 5px;
-     border-radius: 6px;
-     text-decoration: none;
-     font-size: 14px;
-     background: #222;
-     color: white;
-     transition: background 0.3s;
-   }
-   #contact-popup a:hover {
-     background: #333;
-   }
- </style>
- </head>
- <body>
- 
- <button id="menu-btn">
-   <div></div>
-   <div></div>
-   <div></div>
- </button>
- 
- <div id="contact-popup">
-   <h3>get your photo edited</h3>
-   <p>contact us</p>
-   <a href="https://www.instagram.com/sahil.aditya_" target="_blank">📩 dm on instagram</a>
-   <a href="mailto:sahilmaurya321outlook.in">✉️ send email</a>
-   <a id="phone-link" href="#" style="display:none;">📞 call</a>
- </div>
- 
- <div class="info-icon" onclick="showdisclaimer()">ⓘ</div>
- 
- <h1>showcasing my skills</h1>
- <h3>colorist | sahil.aditya_</h3>
- 
- <div id="disclaimer-popup" class="popup">
-   <p>disclaimer: not every image here is clicked by me. some are non-copyright images used only to demonstrate my color grading skills.</p>
-   <button onclick="closedisclaimer()">close</button>
- </div>
- 
- <div id="gallery"></div>
- 
- <script>
-   // contact menu toggle
-   const menubtn = document.getElementById('menu-btn');
-   const contactpopup = document.getElementById('contact-popup');
-   const phonelink = document.getElementById('phone-link');
-   const infoicon = document.querySelector('.info-icon');
- 
-   const phonenumber = "";
-   if (phonenumber) {
-     phonelink.href = "tel:" + phonenumber;
-     phonelink.style.display = "block";
-   }
- 
-   menubtn.addEventListener('click', () => {
-     contactpopup.style.display = (contactpopup.style.display === "block") ? "none" : "block";
-   });
- 
-   document.addEventListener('click', (e) => {
-     if (!contactpopup.contains(e.target) && !menubtn.contains(e.target) && !infoicon.contains(e.target)) {
-       contactpopup.style.display = "none";
-     }
-   });
- 
-   // disclaimer toggle
-   function showdisclaimer() {
-     document.getElementById('disclaimer-popup').style.display = 'block';
-   }
-   function closedisclaimer() {
-     document.getElementById('disclaimer-popup').style.display = 'none';
-   }
- 
-   // fade buttons on scroll
-   window.addEventListener('scroll', () => {
-     if (window.scrollY > 100) {
-       menubtn.style.opacity = '0';
-       infoicon.style.opacity = '0';
-     } else {
-       menubtn.style.opacity = '1';
-       infoicon.style.opacity = '1';
-     }
-   });
- 
-   // slider image pairs
-   const imagepairs = [
-     // important: replace these links with your optimized, resized images to fix the lag.
-     // example: { before: "path/to/optimized/before1.jpg", after: "path/to/optimized/after1.jpg" },
-     { before: "https://sahil-aditya.github.io/creative_gallery/images/before1.jpg", after: "https://sahil-aditya.github.io/creative_gallery/images/after1.jpg" },
-     { before: "https://sahil-aditya.github.io/creative_gallery/images/before9.jpg", after: "https://sahil-aditya.github.io/creative_gallery/images/after9.jpg" },
-     { before: "https://sahil-aditya.github.io/creative_gallery/images/before4.jpg", after: "https://sahil-aditya.github.io/creative_gallery/images/after4.jpeg" },
-     { before: "https://sahil-aditya.github.io/creative_gallery/images/before2.jpg", after: "https://sahil-aditya.github.io/creative_gallery/images/after2.jpg" },
-     { before: "https://sahil-aditya.github.io/creative_gallery/images/before6.jpg", after: "https://sahil-aditya.github.io/creative_gallery/images/after6.jpg" },
-     { before: "https://sahil-aditya.github.io/creative_gallery/images/before5.jpg", after: "https://sahil-aditya.github.io/creative_gallery/images/after5.jpg" },
-     { before: "https://sahil-aditya.github.io/creative_gallery/images/before7.jpg", after: "https://sahil-aditya.github.io/creative_gallery/images/after7.jpg" },
-     { before: "https://sahil-aditya.github.io/creative_gallery/images/before8.jpg", after: "https://sahil-aditya.github.io/creative_gallery/images/after8.jpg" },
-     { before: "https://sahil-aditya.github.io/creative_gallery/images/before10.jpg", after: "https://sahil-aditya.github.io/creative_gallery/images/after10.jpg" },
-     { before: "https://sahil-aditya.github.io/creative_gallery/images/before11.jpg", after: "https://sahil-aditya.github.io/creative_gallery/images/after11.jpg" },
-     { before: "https://sahil-aditya.github.io/creative_gallery/images/before12.jpg", after: "https://sahil-aditya.github.io/creative_gallery/images/after12.jpg" },
-     { before: "https://sahil-aditya.github.io/creative_gallery/images/before13.jpg", after: "https://sahil-aditya.github.io/creative_gallery/images/after13.jpg" },
-     { before: "https://sahil-aditya.github.io/creative_gallery/images/before3.jpg", after: "https://sahil-aditya.github.io/creative_gallery/images/after3.jpg" }
-   ];
- 
-   const gallery = document.getElementById("gallery");
- 
-   imagepairs.forEach(pair => {
-     const container = document.createElement("div");
-     container.classList.add("slider-container");
- 
-     container.innerHTML = `
-       <img src="${pair.after}" alt="after image" class="after-img" />
-       <img src="${pair.before}" alt="before image" class="before-img" />
-       <div class="handle"></div>
-     `;
- 
-     gallery.appendChild(container);
- 
-     const beforeimg = container.querySelector(".before-img");
-     const handle = container.querySelector(".handle");
- 
-     let dragging = false;
- 
-     const move = (x) => {
-       const rect = container.getBoundingClientRect();
-       let offsetX = x - rect.left;
-       if (offsetX < 0) offsetX = 0;
-       if (offsetX > rect.width) offsetX = rect.width;
-       const percent = (offsetX / rect.width) * 100;
-       beforeimg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
-       handle.style.left = `${percent}%`;
-     };
- 
-     handle.addEventListener("mousedown", () => dragging = true);
-     window.addEventListener("mouseup", () => dragging = false);
-     window.addEventListener("mousemove", e => { if (dragging) move(e.clientX); });
- 
-     handle.addEventListener("touchstart", () => dragging = true);
-     window.addEventListener("touchend", () => dragging = false);
-     window.addEventListener("touchmove", e => { if (dragging) move(e.touches ? e.touches?.[0]?.clientX : e.changedTouches?.[0]?.clientX); });
-   });
- 
-   // --- performance-optimized js for focus effect ---
-   const slidercontainers = document.querySelectorAll('.slider-container');
-   let isUpdatingFocus = false;
- 
-   function updateFocus() {
-     isUpdatingFocus = false;
-     const windowHeight = window.innerHeight;
-     // define the focus zone in the middle of the viewport
-     const focusZoneStart = windowHeight * 0.3;
-     const focusZoneEnd = windowHeight * 0.7;
- 
-     slidercontainers.forEach(container => {
-       const rect = container.getBoundingClientRect();
-       const elementCenter = rect.top + rect.height / 2;
- 
-       // check if the center of the element is within our focus zone
-       if (elementCenter > focusZoneStart && elementCenter < focusZoneEnd) {
-         container.classList.add('in-focus');
-       } else {
-         container.classList.remove('in-focus');
-       }
-     });
-   }
- 
-   window.addEventListener('scroll', () => {
-     if (!isUpdatingFocus) {
-       window.requestAnimationFrame(updateFocus);
-       isUpdatingFocus = true;
-     }
-   });
- 
-   // run on page load to set initial focus
-   window.addEventListener('load', updateFocus);
- </script>
- 
- </body>
- </html>
- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Creative Gallery</title>
+<style>
+  body {
+    background-color: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+
+  /* Title */
+  h1 {
+    text-align: center;
+    margin-bottom: 5px;
+    color: white;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    letter-spacing: 1px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 1s ease forwards;
+    margin-top: 50px;
+  }
+  h3 {
+    text-align: center;
+    color: #c0abe1;
+    font-weight: normal;
+    margin-top: 0;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 0.2s;
+  }
+
+  /* Fade-up animation */
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Info icon (Disclaimer Button) */
+  .info-icon {
+    position: fixed;
+    top: 20px;
+    left: 74px;
+    font-size: 18px;
+    color: #c0abe1;
+    cursor: pointer;
+    background: #222;
+    padding: 10px 12px;
+    border-radius: 8px;
+    z-index: 1000;
+    transition: opacity 0.3s ease, background 0.3s;
+    text-align: center;
+    line-height: 18px;
+  }
+  .info-icon:hover {
+    background: #333;
+  }
+
+  /* Disclaimer popup */
+  .popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 300px;
+    background: #fff;
+    color: #000;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-size: 13px;
+    z-index: 2000;
+    text-align: center;
+  }
+  .popup button {
+    background: #000;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-top: 8px;
+    cursor: pointer;
+  }
+  .popup button:hover {
+    background: #333;
+  }
+
+  /* Slider styles */
+  .slider-container {
+    max-width: 800px;
+    margin: 40px auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    user-select: none;
+    transform: scale(0.98); 
+    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  
+  .slider-container.in-focus {
+    transform: scale(1.08);
+  }
+
+  .after-img {
+    display: block;
+    width: 100%;
+  }
+  .before-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    clip-path: inset(0 50% 0 0);
+    transition: clip-path 0.2s ease-out;
+  }
+  /* IMPROVED HANDLE STYLING */
+  .handle {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    background: #fff;
+    cursor: ew-resize;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+  .handle::before {
+    content: '←'; /* The arrow itself */
+    position: absolute;
+    top: 50%;
+    left: -25px; /* Positioned to the left of the slider line */
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 14px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #111; /* Background to make it stand out */
+    border: 1px solid #fff; /* A subtle white border */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .handle:hover::before {
+    transform: translateY(-50%) scale(1.2); /* Scale up on hover */
+    background: #333; /* Darker background on hover */
+  }
+
+  /* Contact Menu Button */
+  #menu-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: #222;
+    border: none;
+    padding: 10px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+  }
+  #menu-btn div {
+    width: 20px;
+    height: 2px;
+    background: white;
+    margin: 4px 0;
+  }
+
+  /* Contact Popup */
+  #contact-popup {
+    position: fixed;
+    top: 60px;
+    left: 20px;
+    background: #111;
+    color: white;
+    border-radius: 10px;
+    padding: 15px;
+    width: 220px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    display: none;
+    z-index: 10000;
+  }
+  #contact-popup h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  #contact-popup p {
+    margin: 4px 0 12px;
+    font-size: 13px;
+    color: #ccc;
+  }
+  #contact-popup a {
+    display: block;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    background: #222;
+    color: white;
+    transition: background 0.3s;
+  }
+  #contact-popup a:hover {
+    background: #333;
+  }
+</style>
+</head>
+<body>
+
+<button id="menu-btn">
+  <div></div>
+  <div></div>
+  <div></div>
+</button>
+
+<div id="contact-popup">
+  <h3>Get Your Photo Edited</h3>
+  <p>Contact Us</p>
+  <a href="https://www.instagram.com/sahil.aditya_" target="_blank">📩 DM on Instagram</a>
+  <a href="mailto:sahilmaurya321@outlook.in">✉️ Send Email</a>
+  <a id="phone-link" href="#" style="display:none;">📞 Call</a>
+</div>
+
+<div class="info-icon" onclick="showDisclaimer()">ⓘ</div>
+
+<h1>Showcasing My Skills</h1>
+<h3>Colorist | sahil.aditya_</h3>
+
+<div id="disclaimer-popup" class="popup">
+  <p>Disclaimer: Not every image here is clicked by me. Some are non-copyright images used only to demonstrate my color grading skills.</p>
+  <button onclick="closeDisclaimer()">Close</button>
+</div>
+
+<div id="gallery"></div>
+
+<script>
+  // Contact menu toggle
+  const menuBtn = document.getElementById('menu-btn');
+  const contactPopup = document.getElementById('contact-popup');
+  const phoneLink = document.getElementById('phone-link');
+  const infoIcon = document.querySelector('.info-icon');
+
+  const phoneNumber = "";
+  if (phoneNumber) {
+    phoneLink.href = "tel:" + phoneNumber;
+    phoneLink.style.display = "block";
+  }
+
+  menuBtn.addEventListener('click', () => {
+    contactPopup.style.display = (contactPopup.style.display === "block") ? "none" : "block";
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!contactPopup.contains(e.target) && !menuBtn.contains(e.target) && !infoIcon.contains(e.target)) {
+      contactPopup.style.display = "none";
+    }
+  });
+
+  // Disclaimer toggle
+  function showDisclaimer() {
+    document.getElementById('disclaimer-popup').style.display = 'block';
+  }
+  function closeDisclaimer() {
+    document.getElementById('disclaimer-popup').style.display = 'none';
+  }
+
+  // Fade buttons on scroll
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 100) {
+      menuBtn.style.opacity = '0';
+      infoIcon.style.opacity = '0';
+    } else {
+      menuBtn.style.opacity = '1';
+      infoIcon.style.opacity = '1';
+    }
+  });
+
+  // Slider image pairs
+  const imagePairs = [
+    // IMPORTANT: Replace these links with your optimized, resized images to fix the lag.
+    // Example: { before: "path/to/optimized/before1.jpg", after: "path/to/optimized/after1.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before1.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after1.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before9.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after9.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before4.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after4.jpeg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before2.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after2.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before6.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after6.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before5.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after5.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before7.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after7.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before8.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after8.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before10.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after10.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before11.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after11.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before12.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after12.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before13.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after13.jpg" },
+    { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before3.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after3.jpg" }
+  ];
+
+  const gallery = document.getElementById("gallery");
+
+  imagePairs.forEach(pair => {
+    const container = document.createElement("div");
+    container.classList.add("slider-container");
+
+    container.innerHTML = `
+      <img src="${pair.after}" alt="After Image" class="after-img" />
+      <img src="${pair.before}" alt="Before Image" class="before-img" />
+      <div class="handle"></div>
+    `;
+
+    gallery.appendChild(container);
+
+    const beforeImg = container.querySelector(".before-img");
+    const handle = container.querySelector(".handle");
+
+    let dragging = false;
+
+    const move = (x) => {
+      const rect = container.getBoundingClientRect();
+      let offsetX = x - rect.left;
+      if (offsetX < 0) offsetX = 0;
+      if (offsetX > rect.width) offsetX = rect.width;
+      const percent = (offsetX / rect.width) * 100;
+      beforeImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+      handle.style.left = `${percent}%`;
+    };
+
+    handle.addEventListener("mousedown", () => dragging = true);
+    window.addEventListener("mouseup", () => dragging = false);
+    window.addEventListener("mousemove", e => { if (dragging) move(e.clientX); });
+
+    handle.addEventListener("touchstart", () => dragging = true);
+    window.addEventListener("touchend", () => dragging = false);
+    window.addEventListener("touchmove", e => { if (dragging) move(e.touches[0].clientX); });
+  });
+
+  // --- Performance-Optimized JS for focus effect ---
+  const sliderContainers = document.querySelectorAll('.slider-container');
+  let isUpdatingFocus = false;
+
+  function updateFocus() {
+    isUpdatingFocus = false;
+    const windowHeight = window.innerHeight;
+    // Define the focus zone in the middle of the viewport
+    const focusZoneStart = windowHeight * 0.3;
+    const focusZoneEnd = windowHeight * 0.7;
+
+    sliderContainers.forEach(container => {
+      const rect = container.getBoundingClientRect();
+      const elementCenter = rect.top + rect.height / 2;
+
+      // Check if the center of the element is within our focus zone
+      if (elementCenter > focusZoneStart && elementCenter < focusZoneEnd) {
+        container.classList.add('in-focus');
+      } else {
+        container.classList.remove('in-focus');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!isUpdatingFocus) {
+      window.requestAnimationFrame(updateFocus);
+      isUpdatingFocus = true;
+    }
+  });
+
+  // Run on page load to set initial focus
+  window.addEventListener('load', updateFocus);
+</script>
+
+</body>
+</html>
