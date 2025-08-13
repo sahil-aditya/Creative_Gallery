@@ -103,18 +103,16 @@
     overflow: hidden;
     border-radius: 10px;
     user-select: none;
-    /* Corrected: Use opacity for fade-in effect to prevent layout bugs */
-    opacity: 0;
-    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    /* NEW: Default scale is slightly smaller */
+    transform: scale(0.98); 
+    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-  /* Class to apply when the element is in view */
-  .slider-container.in-view {
-    opacity: 1;
-  }
-  /* Class to apply to the focused image */
+  
+  /* Class to apply to the focused image, making it slightly bigger */
   .slider-container.in-focus {
     transform: scale(1.02);
   }
+
   .after-img {
     display: block;
     width: 100%;
@@ -349,25 +347,8 @@
     window.addEventListener("touchmove", e => { if (dragging) move(e.touches[0].clientX); });
   });
 
-  // --- NEW JS for scroll animations and focus effect ---
+  // --- NEW JS for focus effect ---
   const sliderContainers = document.querySelectorAll('.slider-container');
-
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.3 // Trigger when 30% of the element is visible
-  };
-
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      // Fade-in animation
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-      } else {
-        entry.target.classList.remove('in-view');
-      }
-    });
-  }, observerOptions);
 
   const focusObserverOptions = {
     root: null,
@@ -387,7 +368,6 @@
   }, focusObserverOptions);
 
   sliderContainers.forEach(container => {
-    observer.observe(container);
     focusObserver.observe(container);
   });
 </script>
