@@ -13,24 +13,45 @@
     padding: 20px;
   }
 
+  /* --- New Heading Container for Alignment --- */
+  .heading-container {
+    text-align: center;
+    padding-top: 50px;
+    margin-left: 20px; /* Align with the menu button */
+  }
+
   /* Title */
   h1 {
     text-align: center;
     margin-bottom: 5px;
-    color: white;
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    /* --- New Glowing, Animated Gradient Styling --- */
+    background: linear-gradient(90deg, #002F63, #2B6ABC, #002F63); /* Blue-black gradient */
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: water-flow 8s linear infinite;
+    text-shadow: 0 0 5px rgba(43, 106, 188, 0.5), 0 0 10px rgba(43, 106, 188, 0.3); /* Blue inner/outer glow */
+    /* --- End New Styling --- */
+    font-size: clamp(1.2rem, 2.5vw, 1.5rem); 
     letter-spacing: 1px;
     opacity: 0;
     transform: translateY(10px);
     animation: fadeUp 1s ease forwards;
-    margin-top: 50px;
+    margin-top: 0; 
   }
   h3 {
     text-align: center;
-    color: #c0abe1;
+    /* --- New Glowing, Animated Gradient Styling --- */
+    background: linear-gradient(90deg, #ffffff, #F1F1F0, #ffffff); /* White-black gradient */
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: water-flow 8s linear infinite;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3); /* White inner/outer glow */
+    /* --- End New Styling --- */
     font-weight: normal;
-    margin-top: 0;
-    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    margin-top: 8px; 
+    font-size: clamp(0.8rem, 1.5vw, 1rem); 
     opacity: 0;
     transform: translateY(10px);
     animation: fadeUp 1s ease forwards;
@@ -360,8 +381,11 @@
   <div class="info-icon" onclick="showDisclaimer()">ⓘ</div>
 </div>
 
-<h1>Showcasing My Skills</h1>
-<h3>Colorist | sahil.aditya_</h3>
+<div class="heading-container">
+    <h1>Showcasing My Skills</h1>
+    <h3>Colorist | sahil.aditya_</h3>
+</div>
+
 
 <div id="disclaimer-popup" class="popup">
   <p>Disclaimer: Not every image here is clicked by me. Some are non-copyright images used only to demonstrate my color grading skills.</p>
@@ -395,6 +419,8 @@
 
   // Disclaimer toggle
   function showDisclaimer() {
+    // --- New logic to close contact popup ---
+    contactPopup.style.display = 'none';
     document.getElementById('disclaimer-popup').style.display = 'block';
   }
   function closeDisclaimer() {
