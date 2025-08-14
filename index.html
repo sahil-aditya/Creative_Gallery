@@ -32,8 +32,7 @@
     margin-top: 0;
     font-size: clamp(0.9rem, 2vw, 1.1rem);
     opacity: 0;
-    transform: translateY(10px);
-    animation: fadeUp 1s ease forwards;
+    transform: translateY(1s ease forwards;
     animation-delay: 0.2s;
   }
 
@@ -367,13 +366,14 @@
     }
   });
 
-  // --- START: NEW JAVASCRIPT FOR VOLUME PANEL ---
+  // --- START: CORRECTED JAVASCRIPT FOR VOLUME PANEL ---
   let audio = null;
   const musicSource = "https://sahil-aditya.github.io/Creative_Gallery/images/music.mp3"; 
   const volumeSlider = document.getElementById('volume-slider');
   const volumeIcon = document.getElementById('volume-icon');
-  let hasInteracted = false;
+  let hasInteracted = false; // Flag to track the very first user interaction
 
+  // Initialize the audio element, but don't play it yet
   function initializeAudio() {
     if (!audio) {
       audio = new Audio(musicSource);
@@ -382,47 +382,56 @@
     }
   }
 
+  // This event listener now only handles volume changes, not the initial play
   volumeSlider.addEventListener('input', () => {
-    initializeAudio();
-    const newVolume = parseFloat(volumeSlider.value);
-    audio.volume = newVolume;
+    if (hasInteracted) {
+      const newVolume = parseFloat(volumeSlider.value);
+      audio.volume = newVolume;
 
-    // Play the music if the volume is increased from 0
-    if (newVolume > 0 && audio.paused) {
-      audio.play();
-      hasInteracted = true;
-    } else if (newVolume === 0) {
-      audio.pause();
-    }
-
-    // Update the icon based on volume level
-    if (newVolume > 0) {
-      volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/play.png';
+      // Update the icon based on volume level
+      if (newVolume > 0) {
+        if (audio.paused) {
+          audio.play();
+        }
+        volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/play.png';
+      } else {
+        audio.pause();
+        volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/mute.png';
+      }
     } else {
-      volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/mute.png';
+      // If the user tries to slide before tapping, reset the slider
+      volumeSlider.value = 0;
     }
   });
 
-  // Toggle mute/unmute by clicking the icon
+  // The main event handler to start playback on the first tap
   volumeIcon.addEventListener('click', () => {
     initializeAudio();
-    if (audio.volume > 0) {
-      // Mute
-      audio.volume = 0;
-      volumeSlider.value = 0;
-      volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/mute.png';
-      audio.pause();
-    } else {
-      // Unmute to a default volume
-      audio.volume = 0.5;
+
+    // The first tap starts the music
+    if (!hasInteracted) {
+      audio.volume = 0.5; // Unmute to a default volume
       volumeSlider.value = 0.5;
       volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/play.png';
       audio.play();
+      hasInteracted = true; // Mark that the first interaction has happened
+    } 
+    // Subsequent taps act as a mute/unmute toggle
+    else {
+      if (audio.volume > 0) {
+        audio.volume = 0;
+        volumeSlider.value = 0;
+        volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/mute.png';
+        audio.pause();
+      } else {
+        audio.volume = 0.5;
+        volumeSlider.value = 0.5;
+        volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/play.png';
+        audio.play();
+      }
     }
-    hasInteracted = true;
   });
-
-  // --- END: NEW JAVASCRIPT FOR VOLUME PANEL ---
+  // --- END: CORRECTED JAVASCRIPT FOR VOLUME PANEL ---
 
   // --- START: MODIFIED CODE FOR BATCH LOADING AND BLUR EFFECT ---
 
