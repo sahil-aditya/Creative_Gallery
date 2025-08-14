@@ -32,7 +32,8 @@
     margin-top: 0;
     font-size: clamp(0.9rem, 2vw, 1.1rem);
     opacity: 0;
-    transform: translateY(1s ease forwards;
+    transform: translateY(10px);
+    animation: fadeUp 1s ease forwards;
     animation-delay: 0.2s;
   }
 
@@ -433,7 +434,7 @@
   });
   // --- END: CORRECTED JAVASCRIPT FOR VOLUME PANEL ---
 
-  // --- START: MODIFIED CODE FOR BATCH LOADING AND BLUR EFFECT ---
+  // --- START: YOUR ORIGINAL BATCH LOADING AND BLUR EFFECT CODE ---
 
   const allImagePairs = [
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before1.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after1.jpg" },
@@ -559,7 +560,6 @@
   document.addEventListener('DOMContentLoaded', loadAllBatches);
 
   // --- END: MODIFIED CODE FOR BATCH LOADING AND BLUR EFFECT ---
-
 </script>
 
 </body>
