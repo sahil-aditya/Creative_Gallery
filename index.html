@@ -239,6 +239,15 @@
   #contact-popup a:hover {
     background: #333;
   }
+  
+  /* New CSS for blurred placeholders */
+  .blurred {
+    filter: blur(15px);
+    transition: filter 0.8s ease; /* Add transition for a smooth effect */
+  }
+  .loaded {
+    filter: blur(0);
+  }
 </style>
 </head>
 <body>
@@ -350,7 +359,7 @@
     }
   });
 
-  // --- START: MODIFIED CODE FOR BATCH LOADING ---
+  // --- START: MODIFIED CODE FOR BATCH LOADING AND BLUR EFFECT ---
 
   const allImagePairs = [
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before1.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after1.jpg" },
@@ -375,15 +384,31 @@
   function createSlider(pair) {
     const container = document.createElement("div");
     container.classList.add("slider-container");
-    container.innerHTML = `
-      <img src="${pair.after}" alt="After Image" class="after-img" />
-      <img src="${pair.before}" alt="Before Image" class="before-img" />
-      <div class="handle"></div>
-    `;
+    
+    // Create and append images with blur class initially
+    const afterImg = document.createElement("img");
+    afterImg.src = pair.after;
+    afterImg.alt = "After Image";
+    afterImg.classList.add("after-img", "blurred");
+
+    const beforeImg = document.createElement("img");
+    beforeImg.src = pair.before;
+    beforeImg.alt = "Before Image";
+    beforeImg.classList.add("before-img", "blurred");
+
+    container.appendChild(afterImg);
+    container.appendChild(beforeImg);
+
+    // Create and append the handle
+    const handle = document.createElement("div");
+    handle.classList.add("handle");
+    container.appendChild(handle);
+    
     gallery.appendChild(container);
 
-    const beforeImg = container.querySelector(".before-img");
-    const handle = container.querySelector(".handle");
+    // Remove blur class once images are loaded
+    afterImg.onload = () => afterImg.classList.remove("blurred");
+    beforeImg.onload = () => beforeImg.classList.remove("blurred");
 
     let dragging = false;
 
@@ -459,7 +484,7 @@
   // Start the batch loading process
   document.addEventListener('DOMContentLoaded', loadAllBatches);
 
-  // --- END: MODIFIED CODE FOR BATCH LOADING ---
+  // --- END: MODIFIED CODE FOR BATCH LOADING AND BLUR EFFECT ---
 
 </script>
 
