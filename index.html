@@ -15,7 +15,7 @@
 
   /* Title */
   h1 {
-    text-align: right; /* Right-aligned */
+    text-align: center;
     margin-bottom: 5px;
     color: white;
     font-size: clamp(1.5rem, 3vw, 2rem);
@@ -24,10 +24,9 @@
     transform: translateY(10px);
     animation: fadeUp 1s ease forwards;
     margin-top: 50px;
-    margin-right: 20px; /* Added right margin */
   }
   h3 {
-    text-align: right; /* Right-aligned */
+    text-align: center;
     color: #c0abe1;
     font-weight: normal;
     margin-top: 0;
@@ -36,7 +35,6 @@
     transform: translateY(10px);
     animation: fadeUp 1s ease forwards;
     animation-delay: 0.2s;
-    margin-right: 20px; /* Added right margin */
   }
 
   /* Fade-up animation */
@@ -167,6 +165,7 @@
   /* Control Buttons */
   .control-btn {
     position: fixed;
+    top: 20px;
     border: none;
     cursor: pointer;
     border-radius: 8px;
@@ -175,8 +174,8 @@
     color: white;
     font-size: 12px;
   }
-
-  /* New: Water-like animation and glass effect for menu button and volume panel */
+  
+  /* NEW: Water-like animation and glass effect for menu button and volume panel */
   #menu-btn, #volume-panel {
     background: linear-gradient(135deg, #1a232f, #2c3e50, #1a232f); 
     background-size: 200% 200%;
@@ -185,7 +184,6 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
     padding: 10px 12px;
-    left: 20px; /* Kept on the left */
   }
 
   #menu-btn:hover, #volume-panel:hover {
@@ -201,8 +199,7 @@
   }
 
   #menu-btn {
-    top: 20px;
-    box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.4); /* Left-side shadow */
+    left: 20px;
   }
   #menu-btn div {
     width: 20px;
@@ -216,7 +213,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    top: 70px; /* Stack below menu button */
+    right: 20px;
     width: 40px;
     height: 40px;
     padding: 0;
@@ -293,7 +290,7 @@
   #contact-popup {
     position: fixed;
     top: 60px;
-    left: 80px; /* To the right of the buttons */
+    left: 20px;
     color: white;
     border-radius: 10px;
     width: 250px; 
@@ -348,7 +345,7 @@
   <div></div>
 </button>
 
-<div id="volume-panel" class="control-btn">
+<div id="volume-panel" class="control-btn" style="right: 20px;">
   <img id="volume-icon" src="https://sahil-aditya.github.io/Creative_Gallery/images/mute.png" alt="Volume" class="volume-icon" />
   <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0" class="volume-slider" />
 </div>
@@ -399,7 +396,6 @@
   // Disclaimer toggle
   function showDisclaimer() {
     document.getElementById('disclaimer-popup').style.display = 'block';
-    contactPopup.style.display = 'none'; // Close the contact popup
   }
   function closeDisclaimer() {
     document.getElementById('disclaimer-popup').style.display = 'none';
