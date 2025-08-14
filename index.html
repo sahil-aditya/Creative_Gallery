@@ -192,17 +192,50 @@
     margin: 4px 0;
   }
 
-  #music-btn {
-    right: 20px;
-    /* Styles for a smaller button */
-    padding: 8px 10px;
-    font-size: 11px;
-    border-radius: 6px;
+  /* New CSS for the volume panel */
+  .volume-panel {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between the icon and slider */
   }
 
-  /* Music button icon styling (keep it hidden when not in use) */
-  .music-icon {
-    display: none;
+  .volume-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .volume-slider {
+    -webkit-appearance: none; /* Hide default slider */
+    width: 80px;
+    height: 4px;
+    background: #555;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .volume-slider:hover {
+    background: #888;
+  }
+
+  /* Style the slider thumb */
+  .volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #c0abe1;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .volume-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: #c0abe1;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
   }
   
   /* Contact Popup */
@@ -262,10 +295,11 @@
   <div></div>
 </button>
 
-<button id="music-btn" class="control-btn">
-  <span class="music-text">Tap to Play</span>
-  <img src="https://sahil-aditya.github.io/Creative_Gallery/images/play.png" alt="Play/Unmute" class="music-icon" />
-</button>
+<div id="volume-panel" class="control-btn volume-panel" style="right: 20px;">
+  <img id="volume-icon" src="https://sahil-aditya.github.io/Creative_Gallery/images/volume-off.png" alt="Volume" class="volume-icon" />
+  <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0" class="volume-slider" />
+</div>
+
 
 <div id="contact-popup">
   <h3>Get Your Photo Edited</h3>
@@ -319,49 +353,74 @@
   }
 
   // Fade buttons on scroll
-  const musicBtn = document.getElementById('music-btn');
+  // Updated to include the new volume panel
+  const volumePanel = document.getElementById('volume-panel'); // New element
 
   window.addEventListener('scroll', () => {
     if (window.scrollY > 100) {
       menuBtn.style.opacity = '0';
       infoIcon.style.opacity = '0';
-      musicBtn.style.opacity = '0';
+      volumePanel.style.opacity = '0'; // Use the new variable here
     } else {
       menuBtn.style.opacity = '1';
       infoIcon.style.opacity = '1';
-      musicBtn.style.opacity = '1';
+      volumePanel.style.opacity = '1'; // Use the new variable here
     }
   });
-  
-  // New JavaScript for music button functionality
-  let audio = null;
-  let audioLoaded = false;
-  const musicSource = "https://sahil-aditya.github.io/Creative_Gallery/images/music.mp3"; 
-  const muteIconSrc = "https://sahil-aditya.github.io/Creative_Gallery/images/mute.png";
-  const playIconSrc = "https://sahil-aditya.github.io/Creative_Gallery/images/play.png";
-  const musicText = musicBtn.querySelector('.music-text');
-  const musicIcon = musicBtn.querySelector('.music-icon');
 
-  musicBtn.addEventListener('click', () => {
-    if (!audioLoaded) {
+  // --- START: NEW JAVASCRIPT FOR VOLUME PANEL ---
+  let audio = null;
+  const musicSource = "https://sahil-aditya.github.io/Creative_Gallery/images/music.mp3"; 
+  const volumeSlider = document.getElementById('volume-slider');
+  const volumeIcon = document.getElementById('volume-icon');
+
+  function initializeAudio() {
+    if (!audio) {
       audio = new Audio(musicSource);
       audio.loop = true;
+      audio.volume = 0; // Start at 0 volume
+    }
+  }
+
+  volumeSlider.addEventListener('input', () => {
+    initializeAudio(); // Initialize audio the first time the slider is used
+    const newVolume = parseFloat(volumeSlider.value);
+    audio.volume = newVolume;
+
+    if (newVolume > 0 && audio.paused) {
       audio.play();
-      audioLoaded = true;
-      musicText.textContent = 'Tap to Mute';
-      musicIcon.src = muteIconSrc;
+    } else if (newVolume === 0) {
+      audio.pause();
+    }
+
+    // Update the icon based on volume level
+    if (newVolume > 0) {
+      volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/volume-up.png';
     } else {
-      if (audio.paused) {
-        audio.play();
-        musicText.textContent = 'Tap to Mute';
-        musicIcon.src = muteIconSrc;
-      } else {
-        audio.pause();
-        musicText.textContent = 'Tap to Play';
-        musicIcon.src = playIconSrc;
-      }
+      volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/volume-off.png';
     }
   });
+
+  // Toggle mute/unmute by clicking the icon
+  volumeIcon.addEventListener('click', () => {
+    initializeAudio();
+    if (audio.volume > 0) {
+      // Mute
+      audio.volume = 0;
+      volumeSlider.value = 0;
+      volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/volume-off.png';
+      audio.pause();
+    } else {
+      // Unmute to a default volume
+      audio.volume = 0.5; // Set to a reasonable default volume
+      volumeSlider.value = 0.5;
+      volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/volume-up.png';
+      audio.play();
+    }
+  });
+
+  // --- END: NEW JAVASCRIPT FOR VOLUME PANEL ---
+
 
   // --- START: MODIFIED CODE FOR BATCH LOADING AND BLUR EFFECT ---
 
