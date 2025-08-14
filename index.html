@@ -353,18 +353,17 @@
   }
 
   // Fade buttons on scroll
-  // Updated to include the new volume panel
-  const volumePanel = document.getElementById('volume-panel'); // New element
+  const volumePanel = document.getElementById('volume-panel');
 
   window.addEventListener('scroll', () => {
     if (window.scrollY > 100) {
       menuBtn.style.opacity = '0';
       infoIcon.style.opacity = '0';
-      volumePanel.style.opacity = '0'; // Use the new variable here
+      volumePanel.style.opacity = '0';
     } else {
       menuBtn.style.opacity = '1';
       infoIcon.style.opacity = '1';
-      volumePanel.style.opacity = '1'; // Use the new variable here
+      volumePanel.style.opacity = '1';
     }
   });
 
@@ -373,22 +372,25 @@
   const musicSource = "https://sahil-aditya.github.io/Creative_Gallery/images/music.mp3"; 
   const volumeSlider = document.getElementById('volume-slider');
   const volumeIcon = document.getElementById('volume-icon');
+  let hasInteracted = false; // Add a flag to track user interaction
 
   function initializeAudio() {
     if (!audio) {
       audio = new Audio(musicSource);
       audio.loop = true;
-      audio.volume = 0; // Start at 0 volume
+      audio.volume = 0;
     }
   }
 
   volumeSlider.addEventListener('input', () => {
-    initializeAudio(); // Initialize audio the first time the slider is used
+    initializeAudio();
     const newVolume = parseFloat(volumeSlider.value);
     audio.volume = newVolume;
 
+    // Play the music if the volume is increased from 0
     if (newVolume > 0 && audio.paused) {
       audio.play();
+      hasInteracted = true; // Set flag to true on first interaction
     } else if (newVolume === 0) {
       audio.pause();
     }
@@ -412,15 +414,15 @@
       audio.pause();
     } else {
       // Unmute to a default volume
-      audio.volume = 0.5; // Set to a reasonable default volume
+      audio.volume = 0.5;
       volumeSlider.value = 0.5;
       volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/volume-up.png';
       audio.play();
     }
+    hasInteracted = true;
   });
 
   // --- END: NEW JAVASCRIPT FOR VOLUME PANEL ---
-
 
   // --- START: MODIFIED CODE FOR BATCH LOADING AND BLUR EFFECT ---
 
