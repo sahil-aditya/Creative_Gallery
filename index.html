@@ -164,7 +164,7 @@
     background: #333; /* Darker background on hover */
   }
 
-  /* Contact Menu Button & Music Button */
+  /* Control Buttons */
   .control-btn {
     position: fixed;
     top: 20px;
@@ -174,7 +174,7 @@
     cursor: pointer;
     border-radius: 8px;
     z-index: 9999;
-    transition: opacity 0.3s ease, background 0.3s, width 0.3s, padding 0.3s, border-radius 0.3s, transform 0.3s;
+    transition: opacity 0.3s ease, background 0.3s;
     color: white;
     font-size: 12px;
   }
@@ -196,33 +196,8 @@
     right: 20px;
   }
 
-  /* Music button states on scroll */
-  #music-btn.scrolled {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border-radius: 50%;
-    background: #222;
-    opacity: 0.6;
-    transform: scale(0.9);
-  }
-  #music-btn.scrolled:hover {
-    opacity: 1;
-    transform: scale(1);
-    background: #333;
-  }
-
-  /* Music button icon styling */
-  #music-btn.scrolled .music-icon {
-    display: block;
-  }
-  #music-btn.scrolled .music-text {
-    display: none;
-  }
+  /* Music button icon styling (keep it hidden when not in use) */
   .music-icon {
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
     display: none;
   }
   
@@ -332,22 +307,16 @@
 
   // Fade buttons on scroll
   const musicBtn = document.getElementById('music-btn');
-  const musicText = musicBtn.querySelector('.music-text');
-  const musicIcon = musicBtn.querySelector('.music-icon');
 
   window.addEventListener('scroll', () => {
     if (window.scrollY > 100) {
       menuBtn.style.opacity = '0';
       infoIcon.style.opacity = '0';
-      musicBtn.classList.add('scrolled');
-      musicText.style.display = 'none';
-      musicIcon.style.display = 'block';
+      musicBtn.style.opacity = '0';
     } else {
       menuBtn.style.opacity = '1';
       infoIcon.style.opacity = '1';
-      musicBtn.classList.remove('scrolled');
-      musicText.style.display = 'block';
-      musicIcon.style.display = 'none';
+      musicBtn.style.opacity = '1';
     }
   });
   
@@ -357,6 +326,8 @@
   const musicSource = "https://sahil-aditya.github.io/Creative_Gallery/images/music.mp3"; 
   const muteIconSrc = "https://sahil-aditya.github.io/Creative_Gallery/images/mute.png";
   const playIconSrc = "https://sahil-aditya.github.io/Creative_Gallery/images/play.png";
+  const musicText = musicBtn.querySelector('.music-text');
+  const musicIcon = musicBtn.querySelector('.music-icon');
 
   musicBtn.addEventListener('click', () => {
     if (!audioLoaded) {
