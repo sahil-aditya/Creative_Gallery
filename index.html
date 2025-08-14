@@ -192,52 +192,87 @@
     margin: 4px 0;
   }
 
-  /* New CSS for the volume panel */
-  .volume-panel {
+  /* --- वॉल्यूम पैनल के लिए नया CSS --- */
+  #volume-panel {
     display: flex;
     align-items: center;
-    gap: 8px; /* Space between the icon and slider */
+    justify-content: center; /* आइकन को बीच में रखें */
+    right: 20px;
+    width: 40px; /* डिफ़ॉल्ट रूप से छोटा */
+    height: 40px;
+    padding: 0; /* पैडिंग हटाएं */
+    overflow: hidden;
+    backdrop-filter: blur(10px); /* ग्लास प्रभाव */
+    background: rgba(34, 34, 34, 0.5); /* अर्ध-पारदर्शी पृष्ठभूमि */
+    transition: width 0.4s ease-in-out, background 0.4s ease-in-out;
+  }
+
+  #volume-panel.expanded {
+    width: 150px;
+    justify-content: space-between; /* आइकन और स्लाइडर को अलग करें */
+    padding: 0 10px; /* चौड़ी होने पर पैडिंग जोड़ें */
+    background: linear-gradient(90deg, #c0abe1, #7f6e91, #c0abe1);
+    background-size: 200% 100%;
+    animation: wavy-water 10s linear infinite;
   }
 
   .volume-icon {
     width: 20px;
     height: 20px;
     cursor: pointer;
+    position: relative; /* आइकन को फ्लोट होने दें */
+    z-index: 10;
   }
 
   .volume-slider {
-    -webkit-appearance: none; /* Hide default slider */
+    -webkit-appearance: none;
+    appearance: none;
     width: 80px;
     height: 4px;
-    background: #555;
+    background: rgba(255, 255, 255, 0.3); /* पारदर्शी स्लाइडर ट्रैक */
     border-radius: 2px;
     outline: none;
     cursor: pointer;
-    transition: background 0.3s;
-  }
-  .volume-slider:hover {
-    background: #888;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    position: absolute;
+    right: 10px;
   }
 
-  /* Style the slider thumb */
+  #volume-panel.expanded .volume-slider {
+    opacity: 1;
+  }
+
+  /* स्लाइडर थंब */
   .volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 12px;
     height: 12px;
-    background: #c0abe1;
+    background: white; /* थंब को सफेद करें */
     border-radius: 50%;
     cursor: pointer;
   }
   .volume-slider::-moz-range-thumb {
     width: 12px;
     height: 12px;
-    background: #c0abe1;
+    background: white; /* थंब को सफेद करें */
     border-radius: 50%;
     cursor: pointer;
     border: none;
   }
-  
+
+  /* लहरदार पानी एनीमेशन */
+  @keyframes wavy-water {
+    0% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: 0 0;
+    }
+  }
+  /* --- वॉल्यूम पैनल के लिए नया CSS --- */
+
   /* Contact Popup */
   #contact-popup {
     position: fixed;
@@ -295,7 +330,7 @@
   <div></div>
 </button>
 
-<div id="volume-panel" class="control-btn volume-panel" style="right: 20px;">
+<div id="volume-panel" class="control-btn" style="right: 20px;">
   <img id="volume-icon" src="https://sahil-aditya.github.io/Creative_Gallery/images/mute.png" alt="Volume" class="volume-icon" />
   <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0" class="volume-slider" />
 </div>
@@ -367,14 +402,14 @@
     }
   });
 
-  // --- START: CORRECTED JAVASCRIPT FOR VOLUME PANEL ---
+  // --- वॉल्यूम पैनल के लिए अपडेटेड JavaScript ---
   let audio = null;
   const musicSource = "https://sahil-aditya.github.io/Creative_Gallery/images/music.mp3"; 
   const volumeSlider = document.getElementById('volume-slider');
   const volumeIcon = document.getElementById('volume-icon');
-  let hasInteracted = false; // Flag to track the very first user interaction
+  let hasInteracted = false;
+  let isExpanded = false;
 
-  // Initialize the audio element, but don't play it yet
   function initializeAudio() {
     if (!audio) {
       audio = new Audio(musicSource);
@@ -383,13 +418,11 @@
     }
   }
 
-  // This event listener now only handles volume changes, not the initial play
   volumeSlider.addEventListener('input', () => {
-    if (hasInteracted) {
+    if (isExpanded) {
       const newVolume = parseFloat(volumeSlider.value);
       audio.volume = newVolume;
 
-      // Update the icon based on volume level
       if (newVolume > 0) {
         if (audio.paused) {
           audio.play();
@@ -399,26 +432,29 @@
         audio.pause();
         volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/mute.png';
       }
-    } else {
-      // If the user tries to slide before tapping, reset the slider
-      volumeSlider.value = 0;
     }
   });
 
-  // The main event handler to start playback on the first tap
   volumeIcon.addEventListener('click', () => {
     initializeAudio();
 
-    // The first tap starts the music
+    // Toggle the expanded state of the panel
+    if (!isExpanded) {
+        volumePanel.classList.add('expanded');
+        isExpanded = true;
+    } else {
+        volumePanel.classList.remove('expanded');
+        isExpanded = false;
+    }
+
+    // Play/Pause logic
     if (!hasInteracted) {
-      audio.volume = 0.5; // Unmute to a default volume
+      audio.volume = 0.5;
       volumeSlider.value = 0.5;
       volumeIcon.src = 'https://sahil-aditya.github.io/Creative_Gallery/images/play.png';
       audio.play();
-      hasInteracted = true; // Mark that the first interaction has happened
-    } 
-    // Subsequent taps act as a mute/unmute toggle
-    else {
+      hasInteracted = true;
+    } else {
       if (audio.volume > 0) {
         audio.volume = 0;
         volumeSlider.value = 0;
@@ -432,10 +468,9 @@
       }
     }
   });
-  // --- END: CORRECTED JAVASCRIPT FOR VOLUME PANEL ---
+  // --- वॉल्यूम पैनल के लिए अपडेटेड JavaScript ---
 
   // --- START: YOUR ORIGINAL BATCH LOADING AND BLUR EFFECT CODE ---
-
   const allImagePairs = [
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before1.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after1.jpg" },
     { before: "https://sahil-aditya.github.io/Creative_Gallery/images/before9.jpg", after: "https://sahil-aditya.github.io/Creative_Gallery/images/after9.jpg" },
