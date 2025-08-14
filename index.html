@@ -15,7 +15,7 @@
 
   /* Title */
   h1 {
-    text-align: center;
+    text-align: left; /* Changed to left-aligned */
     margin-bottom: 5px;
     color: white;
     font-size: clamp(1.5rem, 3vw, 2rem);
@@ -24,9 +24,10 @@
     transform: translateY(10px);
     animation: fadeUp 1s ease forwards;
     margin-top: 50px;
+    margin-left: 20px; /* Added left margin */
   }
   h3 {
-    text-align: center;
+    text-align: left; /* Changed to left-aligned */
     color: #c0abe1;
     font-weight: normal;
     margin-top: 0;
@@ -35,6 +36,7 @@
     transform: translateY(10px);
     animation: fadeUp 1s ease forwards;
     animation-delay: 0.2s;
+    margin-left: 20px; /* Added left margin */
   }
 
   /* Fade-up animation */
@@ -346,7 +348,7 @@
   <div></div>
 </button>
 
-<div id="volume-panel" class="control-btn" style="right: 20px;">
+<div id="volume-panel" class="control-btn">
   <img id="volume-icon" src="https://sahil-aditya.github.io/Creative_Gallery/images/mute.png" alt="Volume" class="volume-icon" />
   <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0" class="volume-slider" />
 </div>
