@@ -45,24 +45,22 @@
     }
   }
 
-  /* Info icon (Disclaimer Button) */
+  /* Info icon (Disclaimer Button) - Now inside the popup */
+  /* This class is now used for the button inside the popup */
   .info-icon {
-    position: fixed;
-    top: 20px;
-    left: 74px;
     font-size: 18px;
     color: #c0abe1;
     cursor: pointer;
-    background: #222;
+    background: rgba(34, 34, 34, 0.7);
     padding: 10px 12px;
-    border-radius: 8px;
-    z-index: 1000;
-    transition: opacity 0.3s ease, background 0.3s;
+    border-radius: 6px;
     text-align: center;
     line-height: 18px;
+    margin-top: 8px; /* Added spacing */
+    transition: background 0.3s;
   }
   .info-icon:hover {
-    background: #333;
+    background: rgba(51, 51, 51, 0.9);
   }
 
   /* Disclaimer popup */
@@ -177,8 +175,8 @@
     font-size: 12px;
   }
   
-  /* NEW: Water-like animation and glass effect for control buttons */
-  .info-icon, #menu-btn {
+  /* NEW: Water-like animation and glass effect for menu button and volume panel */
+  #menu-btn, #volume-panel {
     background: linear-gradient(135deg, #1a232f, #2c3e50, #1a232f); 
     background-size: 200% 200%;
     backdrop-filter: blur(10px); 
@@ -188,7 +186,7 @@
     padding: 10px 12px;
   }
 
-  .info-icon:hover, #menu-btn:hover {
+  #menu-btn:hover, #volume-panel:hover {
     animation: water-flow 8s linear infinite; 
     transform: scale(1.05); 
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
@@ -220,9 +218,6 @@
     height: 40px;
     padding: 0;
     overflow: hidden;
-    backdrop-filter: blur(10px);
-    background: rgba(34, 34, 34, 0.5);
-    transition: width 0.4s ease-in-out, background 0.4s ease-in-out;
   }
 
   #volume-panel.expanded {
@@ -292,20 +287,20 @@
   /* --- वॉल्यूम पैनल के लिए नया CSS --- */
 
   /* Contact Popup */
-  /* NEW: Glass effect for contact popup */
   #contact-popup {
     position: fixed;
     top: 60px;
     left: 20px;
     color: white;
     border-radius: 10px;
-    padding: 15px;
-    width: 220px;
+    width: 250px; 
+    padding: 20px; 
     z-index: 10000;
     background: rgba(17, 17, 17, 0.6); 
     backdrop-filter: blur(15px); 
     border: 1px solid rgba(255, 255, 255, 0.15); 
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    display: none; 
   }
   #contact-popup h3 {
     margin: 0;
@@ -319,8 +314,8 @@
   }
   #contact-popup a {
     display: block;
-    padding: 8px;
-    margin-top: 5px;
+    padding: 10px; 
+    margin-top: 8px; 
     border-radius: 6px;
     text-decoration: none;
     font-size: 14px;
@@ -362,9 +357,8 @@
   <a href="https://www.instagram.com/sahil.aditya_" target="_blank">📩 DM on Instagram</a>
   <a href="mailto:sahilmaurya321@outlook.in">✉️ Send Email</a>
   <a id="phone-link" href="#" style="display:none;">📞 Call</a>
+  <div class="info-icon" onclick="showDisclaimer()">ⓘ</div>
 </div>
-
-<div class="info-icon" onclick="showDisclaimer()">ⓘ</div>
 
 <h1>Showcasing My Skills</h1>
 <h3>Colorist | sahil.aditya_</h3>
@@ -394,7 +388,7 @@
   });
 
   document.addEventListener('click', (e) => {
-    if (!contactPopup.contains(e.target) && !menuBtn.contains(e.target) && !infoIcon.contains(e.target)) {
+    if (!contactPopup.contains(e.target) && !menuBtn.contains(e.target)) {
       contactPopup.style.display = "none";
     }
   });
@@ -413,11 +407,9 @@
   window.addEventListener('scroll', () => {
     if (window.scrollY > 100) {
       menuBtn.style.opacity = '0';
-      infoIcon.style.opacity = '0';
       volumePanel.style.opacity = '0';
     } else {
       menuBtn.style.opacity = '1';
-      infoIcon.style.opacity = '1';
       volumePanel.style.opacity = '1';
     }
   });
